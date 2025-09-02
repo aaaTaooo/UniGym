@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Trainer Registration</title>
+</head>
+<body>
+    <h2>Register as Personal Trainer</h2>
+    <form method="post">
+        {% csrf_token  %}
+
+        {#registration form#}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+
+    {#display message#}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
