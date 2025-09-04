@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gym Member Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }} (Gym Member)</h1>
+    <p>Your email: {{ user.email }}</p>
+    <p>Your membership ends: </p>
+
+    <h2>Available Group Fitness Class</h2>
+    <ul>
+      {% for class in available_classes %}
+        <li>
+          {{ class.title }} - {{ class.date }} ({{ class.booked_count }}/{{ class.capacity }})
+          <a href="{% url 'book_class' class.id %}">Book</a>
+        </li>
+      {% empty %}
+        <li>No available class at the moment</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Booked Group Fitness Class</h2>
+    <ul>
+      {% for class in booked_classes %}
+        <li>
+          {{ class.title }} - {{ class.date }}
+          <a href="{% url 'cancel_booking' class.id %}">Cancel booking</a>
+        </li>
+      {% empty %}
+        <li>No booked class</li>
+      {% endfor %}
+    </ul>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>
