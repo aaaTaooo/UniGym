@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from users.models import CustomUser, GroupFitnessClass, Booking
+from users.models import CustomUser, GroupFitnessClass, Booking, TrainerProfile
 
 
 # Register your models here.
@@ -38,6 +38,10 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = ('member', 'fitness_class', 'booked_at')
     list_filter = ('booked_at',)
 
+class TrainerProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'specialization', 'price_per_hour')
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(GroupFitnessClass, GroupFitnessClassAdmin)
 admin.site.register(Booking, BookingAdmin)
+admin.site.register(TrainerProfile, TrainerProfileAdmin)

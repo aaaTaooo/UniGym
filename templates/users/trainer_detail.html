@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Trainer Details</title>
+</head>
+<body>
+    <h1>{{ trainer_profile.user.username }}</h1>
+    {% if trainer_profile.photo %}
+        <img src="{{ trainer_profile.photo.url }}" width="200">
+    {% endif %}
+
+    <p><strong>Specialization: </strong>{{ trainer_profile.specialization }}</p>
+    <p><strong>About me: </strong>{{ trainer_profile.bio }}</p>
+    <p><strong>Rate: </strong>{{ trainer_profile.price_per_hour }}</p>
+    <p><strong>Contact: </strong>{{ trainer_profile.email }}</p>
+
+    <h2>Availability</h2>
+    {% if availabilities %}
+        <ul>
+        {% for availability in availabilities %}
+            <li>{{ availability.date|date:"Y-m-d" }} {{ availability.start_time }} - {{ availability.end_time }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No availability provided</p>
+    {% endif %}
+
+    {% if user.is_authenticated and user.role == "memeber" %}
+        <a href="#">Book a session (under developing)</a>
+    {% endif %}
+</body>
+</html>

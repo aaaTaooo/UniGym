@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from users.forms import GymMemberRegistrationForm, PersonalTrainerRegistrationForm
-from users.models import GroupFitnessClass, Booking
+from users.models import GroupFitnessClass, Booking, TrainerProfile, Availability
+from .forms import AvailabilityForm
 
 
 # Create your views here.
@@ -70,7 +71,46 @@ def member_dashboard(request):
 
 @login_required
 def trainer_dashboard(request):
-    return render(request, 'users/trainer_dashboard.html')
+    trainer_profile = request.user.trainer_profile
+    availabilities = trainer_profile.availabilities.all()
+    form = None
+
+    if request.method == 'POST':
+        #Delete availability
+        if 'delete_id' in request.POST:
+            availability_id = request.POST.get('delete_id')
+            availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
+            availability.delete()
+            return redirect('trainer_dashboard')
+
+        #Edit availability
+        elif'edit_id' in request.POST:
+            availability_id = request.POST.get('edit_id')
+            availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
+            form = AvailabilityForm(instance=availability)
+
+        #Add and update availability
+        elif 'availability_id' in request.POST or 'date' in request.POST:
+            availability_id = request.POST.get('availability_id')
+            if availability_id:
+                availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
+                form = AvailabilityForm(request.POST, instance=availability)
+            else:
+                form = AvailabilityForm(request.POST)
+
+            if form.is_valid():
+                availability = form.save(commit=False)
+                availability.trainer = trainer_profile
+                availability.save()
+                return redirect('trainer_dashboard')
+
+    if not form:
+        form = AvailabilityForm()
+
+    return render(request, 'users/trainer_dashboard.html', {"trainer_profile": trainer_profile,
+                                                                "availabilities": availabilities,
+                                                                "form": form, })
+
 
 @login_required
 def admin_dashboard(request):
@@ -100,6 +140,7 @@ def book_class(request, class_id):
 
     return redirect('member_dashboard')
 
+#cancel group class
 @login_required
 def cancel_booking(request, class_id):
     fitness_class = get_object_or_404(GroupFitnessClass, id=class_id)
@@ -112,3 +153,14 @@ def cancel_booking(request, class_id):
         messages.warning(request, 'Booking cancel failed.')
 
     return redirect('member_dashboard')
+
+#trainer profile
+def trainer_list(request):
+    trainers = TrainerProfile.objects.filter(user__role='trainer', user__is_approved=True)
+    return render(request, "users/trainer_list.html", {'trainers':trainers})
+
+def trainer_detail(request, trainer_id):
+    trainer_profile = get_object_or_404(TrainerProfile, id=trainer_id)
+    availabilities = trainer_profile.availabilities.all()
+    return render(request, "users/trainer_detail.html", {"trainer_profile":trainer_profile,
+                                                         "availabilities":availabilities})

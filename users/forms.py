@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from users.models import CustomUser
+from users.models import CustomUser, Availability
 
 
 class GymMemberRegistrationForm(UserCreationForm):
@@ -34,3 +34,8 @@ class PersonalTrainerRegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class AvailabilityForm(forms.ModelForm):
+    class Meta:
+        model = Availability
+        fields = ['date', 'start_time', 'end_time']

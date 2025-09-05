@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Trainer</title>
+</head>
+<body>
+    <h1>Our Personal Trainers</h1>
+    <ul>
+        {% for trainer in trainers %}
+            <li>
+                <a href="{% url 'trainer_detail' trainer.id %}">
+                    {% if trainer.photo %}
+                        <img src="{{ trainer.photo.url }}" width="100">
+                    {% endif %}
+                    {{ trainer.user.username }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No trainers available</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

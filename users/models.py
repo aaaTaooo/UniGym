@@ -50,3 +50,24 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.member.username} booked {self.fitness_class.title}"
+
+class TrainerProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='trainer_profile')
+    bio = models.TextField(blank=True, null=True)
+    specialization = models.CharField(max_length=100, blank=True, null=True)
+    price_per_hour = models.FloatField(blank=True, null=True)
+    photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+class Availability(models.Model):
+    trainer = models.ForeignKey("users.TrainerProfile", on_delete=models.CASCADE, related_name='availabilities')
+    date = models.DateTimeField()
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.trainer.user.username} - {self.date} {self.start_time} - {self.end_time}"
