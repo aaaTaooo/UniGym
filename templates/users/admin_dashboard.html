@@ -3,12 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
+    <style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+    header { background: #343a40; color: white; padding: 1rem; }
+    h1 { margin: 0; }
+    .container { padding: 2rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .card h2 { margin: 0; font-size: 2rem; color: #007bff; }
+    .card p { margin-top: 0.5rem; font-size: 1rem; color: #333; }
+    a.logout { display: inline-block; margin-top: 1rem; text-decoration: none; color: #007bff; }
+    </style>
 </head>
 <body>
-    <h1>Welcome, {{ user.username }} (Administrator)</h1>
+    {#Static display#}
+    <div class="container">
+        <h1>Welcome, {{ user.username }} (Administrator)</h1>
 
+        <div class="stats">
+            <div class="card">
+                <h2>{{  stats.total_users }}</h2>
+                <p>Total Users</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_trainers }}</h2>
+                <p>Personal Trainers</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_members }}</h2>
+                <p>Members</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_classes }}</h2>
+                <p>Group Classes</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_bookings }}</h2>
+                <p>Total Bookings</p>
+            </div>
+        </div>
 
-    <a href="{% url 'logout' %}">Logout</a>
+        {% block content %}
+            {#Member and trainer approval#}
+            <hr>
+            <h2 style="margin-top: 3rem;">Pending Applications</h2>
 
+                <!-- Pending Members -->
+            <h3>Pending Member Applications</h3>
+            {% if pending_members %}
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+                {% for m in pending_members %}
+                <tr>
+                  <td>{{ m.user.username }}</td>
+                  <td>{{ m.user.email }}</td>
+                  <td>
+                    <form method="post" style="display:inline;">
+                      {% csrf_token %}
+                      <button type="submit" name="approve_member" value="{{ m.id }}">Approve</button>
+                    </form>
+                    <form method="post" style="display:inline;">
+                      {% csrf_token %}
+                      <button type="submit" name="reject_member" value="{{ m.id }}">Reject</button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            {% else %}
+              <p>No pending member applications</p>
+            {% endif %}
+
+                <!-- Pending Trainers -->
+            <h3 style="margin-top: 2rem;">Pending Personal Trainer Applications</h3>
+            {% if pending_trainers %}
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Specialization</th>
+                  <th>Actions</th>
+                </tr>
+                {% for t in pending_trainers %}
+                <tr>
+                  <td>{{ t.user.username }}</td>
+                  <td>{{ t.user.email }}</td>
+                  <td>{{ t.specialization }}</td>
+                  <td>
+                    <form method="post" style="display:inline;">
+                      {% csrf_token %}
+                      <button type="submit" name="approve_trainer" value="{{ t.id }}">Approve</button>
+                    </form>
+                    <form method="post" style="display:inline;">
+                      {% csrf_token %}
+                      <button type="submit" name="reject_trainer" value="{{ t.id }}">Reject</button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            {% else %}
+              <p>No pending trainer applications</p>
+            {% endif %}
+
+            <hr>
+            <h2>Manage Group Fitness Classes</h2>
+            <p><a href="{% url 'manage_group_fitness_class' %}"> Manage classes</a></p>
+
+            <hr>
+            <h2>Manage Member's bookings</h2>
+            <p><a href="{% url 'view_bookings' %}">View all bookings</a></p>
+        {% endblock %}
+
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
 </body>
 </html>

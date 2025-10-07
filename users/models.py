@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
 class GroupFitnessClass(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     location = models.CharField(max_length=100)
     capacity = models.IntegerField()
 
@@ -41,15 +41,29 @@ class GroupFitnessClass(models.Model):
         return self.bookings.count()
 
 class Booking(models.Model):
+    STATUS_CHOICES = [
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES,default='confirmed')
     member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'member'})
     fitness_class = models.ForeignKey(GroupFitnessClass, on_delete=models.CASCADE, related_name='bookings')
-    booked_at = models.DateTimeField(auto_now_add=True)
+    booked_at = models.DateTimeField()
 
     class Meta:
         unique_together = ('member', 'fitness_class')
 
     def __str__(self):
         return f"{self.member.username} booked {self.fitness_class.title}"
+
+class MemberProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='member_profile')
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    join_date = models.DateTimeField()
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
 
 class TrainerProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='trainer_profile')
@@ -58,6 +72,7 @@ class TrainerProfile(models.Model):
     price_per_hour = models.FloatField(blank=True, null=True)
     photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

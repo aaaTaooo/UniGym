@@ -1,0 +1,44 @@
+{% extends 'users/admin_dashboard.html' %}
+
+{% block content %}
+    <h2> All Bookings</h2>
+
+    <table>
+        <tr>
+            <th>Member</th>
+            <th>Email</th>
+            <th>Class Title</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Booked At</th>
+            <th>Action</th>
+        </tr>
+
+        {% for b in bookings %}
+        <tr>
+            <td>{{ b.member.username }}</td>
+            <td>{{ b.member.email }}</td>
+            <td>{{ b.fitness_class.title }}</td>
+            <td>{{ b.fitness_class.date|date:"Y-m-d H:i" }}</td>
+            <td>{{ b.fitness_class.location }}</td>
+            <td>{{ b.booked_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                {% if b.status != 'cancelled' %}
+                <form action="{% url 'cancel_booking' b.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Cancel</button>
+                </form>
+                {% else %}
+                    <span>Cancelled</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>No bookings found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{% url 'admin_dashboard' %}">Back to admin dashboard</a>
+{% endblock %}

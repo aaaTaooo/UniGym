@@ -1,0 +1,31 @@
+{% extends 'users/admin_dashboard.html' %}
+{% block content %}
+    <h2>Manage Group Fitness Classes</h2>
+    <a href="{% url 'add_group_fitness_class' %}"> Add New Class </a>
+
+    <table>
+    <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Capacity</th>
+        <th>Booked</th>
+        <th>Actions</th>
+    </tr>
+    {% for c in classes %}
+    <tr>
+        <td>{{ c.title }}</td>
+        <td>{{ c.date|date:"Y-m-d H:i" }}</td>
+        <td>{{ c.location }}</td>
+        <td>{{ c.capacity }}</td>
+        <td>{{ c.booked_count }}</td>
+        <td>
+            <a href="{% url 'edit_group_fitness_class' c.id %}"> Edit</a>
+            <a href="{% url 'delete_group_fitness_class' c.id %}"> Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <a href="{% url 'admin_dashboard' %}">Back to admin dashboard</a>
+{% endblock %}

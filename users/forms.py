@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from users.models import CustomUser, Availability
+from users.models import CustomUser, Availability, GroupFitnessClass
 
 
 class GymMemberRegistrationForm(UserCreationForm):
@@ -39,3 +39,9 @@ class AvailabilityForm(forms.ModelForm):
     class Meta:
         model = Availability
         fields = ['date', 'start_time', 'end_time']
+
+class GroupFitnessClassForm(forms.ModelForm):
+    class Meta:
+        model = GroupFitnessClass
+        fields = ['title', 'description', 'date', 'location', 'capacity']
+        widgets = {'date': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
