@@ -1,9 +1,7 @@
-from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
 
 
 # Create your models here.
@@ -74,12 +72,6 @@ class MemberProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='member_profile')
     phone = models.CharField(max_length=20, blank=True, null=True)
     join_date = models.DateTimeField(auto_now_add=True)
-    # membership_end = models.DateField(default=lambda: timezone.now().date() + timedelta(days=365))
-    #is_approved = models.BooleanField(default=False)
-
-    # def is_active(self):
-    #     from datetime import date
-    #     return self.membership_end >= date.today()
 
     def __str__(self):
         return self.user.username
@@ -91,7 +83,6 @@ class TrainerProfile(models.Model):
     price_per_hour = models.FloatField(blank=True, null=True)
     photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    #is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

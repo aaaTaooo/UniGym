@@ -15,16 +15,20 @@ urlpatterns = [
     path('dashboard/member/bookings/', views.member_booking, name='member_booking'),
     path('dashboard/member/book/<int:class_id>/', views.book_class, name='book_class'),
     path('dashboard/member/cancel/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
+    path("dashboard/member/trainers/", views.member_trainer_list, name="member_trainer_list"),
+    path("dashboard/member/trainers/<int:trainer_id>/", views.member_trainer_detail, name='member_trainer_detail'),
 
 
     # Trainer dashboard urls
     path('dashboard/trainer/', views.trainer_dashboard, name='trainer_dashboard'),
     path('user/dashboard/trainer/class/', views.trainer_class, name='trainer_class'),
     path('user/dashboard/trainer/availability/', views.trainer_availability, name='trainer_availability'),
+    path('user/dashboard/trainer/update/', views.update_trainer_profile, name='update_trainer_profile'),
 
 
     # Admin dashboard urls
     path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
+    path('dashboard/admin/application', views.manage_pending_user, name='manage_pending_user'),
     path('dashboard/admin/classes/', views.manage_group_fitness_class, name='manage_group_fitness_class'),
     path('dashboard/admin/classes/add/', views.add_group_fitness_class, name='add_group_fitness_class'),
     path('dashboard/admin/classes/edit/<int:class_id>/', views.edit_group_fitness_class, name='edit_group_fitness_class'),
@@ -33,9 +37,7 @@ urlpatterns = [
     path('dashboard/admin/bookings/<int:booking_id>/cancel/', views.admin_cancel_booking, name='admin_cancel_booking'),
 
 
-    path('fitness/classes/', views.group_fitness_list, name='group_fitness_list'),
-    path('fitness/book/<int:class_id>/', views.book_class, name='book_class'),
+    # path('fitness/book/<int:class_id>/', views.book_class, name='book_class'),
 
-    path("trainers/", views.trainer_list, name="trainer_list"),
-    path("trainers/<int:trainer_id>/", views.trainer_detail, name='trainer_detail'),
+
 ]

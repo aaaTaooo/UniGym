@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 
-from users.forms import GymMemberRegistrationForm, PersonalTrainerRegistrationForm, GroupFitnessClassForm
+from users.forms import GymMemberRegistrationForm, PersonalTrainerRegistrationForm, GroupFitnessClassForm, \
+    TrainerUpdateForm
 from users.models import GroupFitnessClass, Booking, TrainerProfile, Availability, CustomUser, MemberProfile
 from .forms import AvailabilityForm
 
@@ -19,7 +20,7 @@ def gm_register(request):
             return redirect('login')
     else:
         form = GymMemberRegistrationForm()
-    return render(request, 'users/member_register.html', {'form':form})
+    return render(request, 'users/Member/member_register.html', {'form':form})
 def pt_register(request):
     if request.method == 'POST':
         form = PersonalTrainerRegistrationForm(request.POST)
@@ -29,7 +30,7 @@ def pt_register(request):
             return redirect('login')
     else:
         form = PersonalTrainerRegistrationForm()
-    return render(request, 'users/trainer_register.html', {'form':form})
+    return render(request, 'users/Trainer/trainer_register.html', {'form':form})
 
 # Users login page
 def custom_login(request):
@@ -76,7 +77,7 @@ def trainer_check(user):
 def member_dashboard(request):
     profile = MemberProfile.objects.filter(user=request.user).first()
 
-    return render(request, 'users/member_dashboard.html', {
+    return render(request, 'users/Member/member_dashboard.html', {
         'user': request.user,
         'profile': profile,
     })
@@ -85,20 +86,13 @@ def member_dashboard(request):
 @user_passes_test(member_check)
 def member_class(request):
     available_classes = GroupFitnessClass.objects.exclude(bookings__member=request.user).order_by('date')
-    return render(request, 'users/member_class.html', {'available_classes':available_classes})
+    return render(request, 'users/Member/member_class.html', {'available_classes':available_classes})
 
 @login_required
 @user_passes_test(member_check)
 def member_booking(request):
     bookings = Booking.objects.filter(member=request.user).select_related('fitness_class', 'fitness_class__trainer').order_by('fitness_class__date')
-    return render(request, 'users/member_booking.html', {'bookings': bookings})
-
-#group fitness class list for members
-@login_required
-@user_passes_test(member_check)
-def group_fitness_list(request):
-    classes = GroupFitnessClass.objects.all().order_by('date')
-    return render(request, 'fitness/group_fitness_list.html', {'classes':classes})
+    return render(request, 'users/Member/member_booking.html', {'bookings': bookings})
 
 #booking group class
 @login_required
@@ -129,34 +123,37 @@ def cancel_booking(request, booking_id):
 
     return redirect('member_booking')
 
-#trainer profile
-def trainer_list(request):
+# Trainer list for member to view
+def member_trainer_list(request):
     trainers = TrainerProfile.objects.filter(user__role='trainer', user__is_approved=True)
-    return render(request, "users/trainer_list.html", {'trainers':trainers})
+    return render(request, "users/Member/member_trainer_list.html", {'trainers':trainers})
 
-def trainer_detail(request, trainer_id):
+# Trainer details for member to view
+def member_trainer_detail(request, trainer_id):
     trainer_profile = get_object_or_404(TrainerProfile, id=trainer_id)
     availabilities = trainer_profile.availabilities.all()
-    return render(request, "users/trainer_detail.html", {"trainer_profile":trainer_profile,
-                                                         "availabilities":availabilities})
+    return render(request, "users/Member/member_trainer_detail.html", {
+        "trainer_profile":trainer_profile,
+        "availabilities":availabilities,
+    })
 
 # ===================================Trainers related functions===================================
 @login_required
 @user_passes_test(trainer_check)
 def trainer_dashboard(request):
-    trainer_profile = request.user.trainer_profile
-    return render(request, 'users/trainer_dashboard.html', {"trainer_profile": trainer_profile,})
+    trainer_profile = TrainerProfile.objects.filter(user=request.user).first()
+    return render(request, 'users/Trainer/trainer_dashboard.html', {"trainer_profile": trainer_profile, })
 
 @login_required
 @user_passes_test(trainer_check)
 def trainer_class(request):
     my_classes = GroupFitnessClass.objects.filter(trainer=request.user).order_by('date')
-    return render(request, 'users/trainer_class.html', {'my_classes': my_classes})
+    return render(request, 'users/Trainer/trainer_class.html', {'my_classes': my_classes})
 
 @login_required
 @user_passes_test(trainer_check)
 def trainer_availability(request):
-    trainer_profile = request.user.trainer_profile
+    trainer_profile = TrainerProfile.objects.filter(user=request.user).first()
     availabilities = trainer_profile.availabilities.all()
     form = None
 
@@ -192,19 +189,40 @@ def trainer_availability(request):
     if not form:
         form = AvailabilityForm()
 
-    return render(request, 'users/trainer_availability.html', {
+    return render(request, 'users/Trainer/trainer_availability.html', {
         "trainer_profile": trainer_profile,
         "availabilities": availabilities,
         "form": form,
     })
 
+@login_required
+@user_passes_test(trainer_check)
+def update_trainer_profile(request):
+    trainer_profile = get_object_or_404(TrainerProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = TrainerUpdateForm(request.POST, request.FILES, instance=trainer_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('trainer_dashboard')
+    else:
+        form = TrainerUpdateForm(instance=trainer_profile)
+
+    return render(request, 'users/Trainer/update_trainer_profile.html', {'form': form})
+
 # ===================================Admin related functions===================================
 def get_admin_stats():
+    total_users = CustomUser.objects.count()
+    total_trainers = TrainerProfile.objects.count()
+    total_members = CustomUser.objects.filter(role='member').count()
+
     return {
         "stats": {
             "total_users": CustomUser.objects.count(),
             "total_trainers": TrainerProfile.objects.count(),
             "total_members": CustomUser.objects.filter(role='member').count(),
+            "total_admins": total_users - total_trainers - total_members,
             "total_bookings": Booking.objects.count(),
             "total_classes": GroupFitnessClass.objects.count(),
         },
@@ -214,6 +232,14 @@ def get_admin_stats():
 @login_required
 @user_passes_test(admin_check)
 def admin_dashboard(request):
+    context = get_admin_stats()
+
+    return render(request, 'users/Admin/admin_dashboard.html', context)
+
+# Manage pending users
+@login_required
+@user_passes_test(admin_check)
+def manage_pending_user(request):
     context = get_admin_stats()
 
     if request.method == 'POST':
@@ -235,9 +261,8 @@ def admin_dashboard(request):
             trainer_id = request.POST.get('reject_trainer')
             trainer = get_object_or_404(TrainerProfile, id=trainer_id)
             trainer.user.delete()
-
-        return redirect('admin_dashboard')
-    return render(request, 'users/admin_dashboard.html', context)
+        return redirect('manage_pending_user')
+    return render(request, 'users/Admin/manage_pending_user.html', context)
 
 #Group fitness class management for admin
 @login_required
@@ -246,7 +271,7 @@ def manage_group_fitness_class(request):
     classes = GroupFitnessClass.objects.all().order_by('date')
     context = get_admin_stats()
     context['classes'] = classes
-    return render(request, 'users/manage_group_fitness_class.html', context)
+    return render(request, 'users/Admin/manage_group_fitness_class.html', context)
 
 #Add group fitness class
 @login_required
@@ -266,7 +291,7 @@ def add_group_fitness_class(request):
 
     context['form'] = form
     context['action'] = 'Add'
-    return render(request, 'users/group_fitness_class_form.html', context)
+    return render(request, 'users/Admin/group_fitness_class_form.html', context)
 
 #Edit group fitness class
 @login_required
@@ -285,7 +310,7 @@ def edit_group_fitness_class(request, class_id):
 
     context['form'] = form
     context['action'] = 'Edit'
-    return render(request, 'users/group_fitness_class_form.html', context)
+    return render(request, 'users/Admin/group_fitness_class_form.html', context)
 
 #Delete group fitness class
 @login_required
@@ -305,7 +330,7 @@ def view_bookings(request):
     bookings = Booking.objects.select_related('member', 'fitness_class').all().order_by('booked_at')
     context['bookings'] = bookings
 
-    return render(request, 'users/view_bookings.html', context)
+    return render(request, 'users/Admin/view_bookings.html', context)
 
 @login_required
 @user_passes_test(admin_check)

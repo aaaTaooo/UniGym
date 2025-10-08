@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Trainer Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }} (Personal Trainer)</h1>
+    <p>Your email: {{ user.email }}</p>
+
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'trainer_dashboard' %}">Trainer Dashboard</a></li>
+            <li><a href="{% url 'trainer_availability' %}">Manage Availability</a></li>
+            <li><a href="{% url 'trainer_class' %}">My Group Classes</a></li>
+            <li><a href="{% url 'update_trainer_profile' %}">Update Profile</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+    {% block content %}
+        {% if trainer_profile %}
+            <h2>Your Profile Details</h2>
+
+            {% if trainer_profile.photo %}
+                <img src="{{ trainer_profile.photo.url }}" alt="Your photo" width ="300">
+            {% else %}
+                <p>No Photo uploaded yet.</p>
+            {% endif %}
+
+            <p><strong>Specialization:</strong> {{ trainer_profile.specialization }}</p>
+            <p><strong>Bio:</strong> {{ trainer_profile.bio }}</p>
+            <p><strong>Price per hour:</strong> ${{ trainer_profile.price_per_hour }}/Hour</p>
+            <p><strong>Contact Email:</strong> {{ trainer_profile.email }}</p>
+
+        {% else %}
+            <p>No profile found. Please <a href="{% url 'update_trainer_profile' %}">create or update your profile</a>.</p>
+        {% endif %}
+    {% endblock %}
+
+    <hr>
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

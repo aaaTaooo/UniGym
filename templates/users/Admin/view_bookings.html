@@ -1,5 +1,4 @@
-{% extends 'users/admin_dashboard.html' %}
-
+{% extends 'users/Admin/admin_dashboard.html' %}
 {% block content %}
     <h2> All Bookings</h2>
 
@@ -32,7 +31,7 @@
             </td>
             <td>
                 {% if b.status != 'cancelled' %}
-                <form action="{% url 'cancel_booking' b.id %}" method="post">
+                <form action="{% url 'admin_cancel_booking' b.id %}" method="post">
                     {% csrf_token %}
                     <button type="submit">Cancel</button>
                 </form>

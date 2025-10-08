@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Personal Trainer</title>
-</head>
-<body>
-    <h1>Our Personal Trainers</h1>
+{% extends 'users/Member/member_dashboard.html' %}
+{% block content %}
+    <h2>Our Personal Trainers</h2>
     <ul>
         {% for trainer in trainers %}
             <li>
-                <a href="{% url 'trainer_detail' trainer.id %}">
+                <a href="{% url 'member_trainer_detail' trainer.id %}">
                     {% if trainer.photo %}
                         <img src="{{ trainer.photo.url }}" width="100">
                     {% endif %}
@@ -20,5 +15,5 @@
             <li>No trainers available</li>
         {% endfor %}
     </ul>
-</body>
-</html>
+    <a href="{% url 'member_dashboard' %}">Back to Member Dashboard</a>
+{% endblock %}

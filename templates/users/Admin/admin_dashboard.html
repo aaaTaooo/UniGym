@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    {#Static display#}
+    <div class="container">
+        <h1>Welcome, {{ user.username }} (Administrator)</h1>
+
+        <div class="stats">
+            <div class="card">
+                <h2>{{  stats.total_users }}</h2>
+                <p>Total Users</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_trainers }}</h2>
+                <p>Personal Trainers</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_members }}</h2>
+                <p>Members</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_classes }}</h2>
+                <p>Group Classes</p>
+            </div>
+            <div class="card">
+                <h2>{{  stats.total_bookings }}</h2>
+                <p>Total Bookings</p>
+            </div>
+        </div>
+
+        <hr>
+        <nav>
+            <ul>
+                <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                <li><a href="{% url 'manage_pending_user' %}">Manage Pending Users</a></li>
+                <li><a href="{% url 'manage_group_fitness_class' %}">Manage Group Fitness Classes</a></li>
+                <li><a href="{% url 'view_bookings' %}">Manage Member Bookings</a></li>
+            </ul>
+        </nav>
+
+        <hr>
+        {% block content %}
+            <h2>Platform Overview</h2>
+            <canvas id="userChart" width="500" height="500"></canvas>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('userChart');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Gym Members', 'Personal trainers', 'Administrators'],
+                        datasets: [{
+                            label: 'User Distribution',
+                            data: [
+                                {{ stats.total_members }},
+                                {{ stats.total_trainers }},
+                                {{ stats.total_admins }}
+                            ],
+                            backgroundColor:['#31A2E8', '#FCFE56', '#FF1314']
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            }
+                        }
+                    }
+                });
+            </script>
+        {% endblock %}
+
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</body>
+</html>

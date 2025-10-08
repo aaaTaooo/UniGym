@@ -1,0 +1,68 @@
+{% extends 'users/Admin/admin_dashboard.html' %}
+{% block content %}
+    {#Member and trainer approval#}
+    <h2>Pending Applications</h2>
+
+    <!-- Pending Members -->
+    <h3>Pending Member Applications</h3>
+    {% if pending_members %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        {% for m in pending_members %}
+            <tr>
+                <td>{{ m.user.username }}</td>
+                <td>{{ m.user.email }}</td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="approve_member" value="{{ m.id }}">Approve</button>
+                    </form>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="reject_member" value="{{ m.id }}">Reject</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <p>No pending member applications</p>
+    {% endif %}
+
+    <!-- Pending Trainers -->
+    <h3>Pending Personal Trainer Applications</h3>
+    {% if pending_trainers %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Specialization</th>
+                <th>Actions</th>
+            </tr>
+            {% for t in pending_trainers %}
+                <tr>
+                    <td>{{ t.user.username }}</td>
+                    <td>{{ t.user.email }}</td>
+                    <td>{{ t.specialization }}</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="approve_trainer" value="{{ t.id }}">Approve</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="reject_trainer" value="{{ t.id }}">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No pending trainer applications</p>
+    {% endif %}
+    <a href="{% url 'admin_dashboard' %}">Back to admin dashboard</a>
+{% endblock %}
