@@ -46,7 +46,7 @@
         {% block content %}
             {#Member and trainer approval#}
             <hr>
-            <h2 style="margin-top: 3rem;">Pending Applications</h2>
+            <h2>Pending Applications</h2>
 
                 <!-- Pending Members -->
             <h3>Pending Member Applications</h3>
@@ -62,11 +62,11 @@
                   <td>{{ m.user.username }}</td>
                   <td>{{ m.user.email }}</td>
                   <td>
-                    <form method="post" style="display:inline;">
+                    <form method="post">
                       {% csrf_token %}
                       <button type="submit" name="approve_member" value="{{ m.id }}">Approve</button>
                     </form>
-                    <form method="post" style="display:inline;">
+                    <form method="post">
                       {% csrf_token %}
                       <button type="submit" name="reject_member" value="{{ m.id }}">Reject</button>
                     </form>
@@ -79,7 +79,7 @@
             {% endif %}
 
                 <!-- Pending Trainers -->
-            <h3 style="margin-top: 2rem;">Pending Personal Trainer Applications</h3>
+            <h3>Pending Personal Trainer Applications</h3>
             {% if pending_trainers %}
               <table>
                 <tr>
@@ -94,11 +94,11 @@
                   <td>{{ t.user.email }}</td>
                   <td>{{ t.specialization }}</td>
                   <td>
-                    <form method="post" style="display:inline;">
+                    <form method="post">
                       {% csrf_token %}
                       <button type="submit" name="approve_trainer" value="{{ t.id }}">Approve</button>
                     </form>
-                    <form method="post" style="display:inline;">
+                    <form method="post">
                       {% csrf_token %}
                       <button type="submit" name="reject_trainer" value="{{ t.id }}">Reject</button>
                     </form>

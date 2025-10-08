@@ -1,0 +1,22 @@
+{% extends 'users/member_dashboard.html' %}
+{% block content %}
+    <h2>Available Group Fitness Classes</h2>
+    <ul>
+        {% for class in available_classes %}
+            <li>
+                {{ class.title }} - {{ class.date }} ({{ class.booked_count }}/{{ class.capacity }})
+                <a href="{% url 'book_class' class.id %}">Book</a>
+            </li>
+        {% empty %}
+            <li>No available class at the moment</li>
+        {% endfor %}
+    </ul>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,10 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
+
 
 # Create your models here.
 #User model
@@ -25,9 +29,19 @@ class GroupFitnessClass(models.Model):
     location = models.CharField(max_length=100)
     capacity = models.IntegerField()
 
+
     #only admin account can create group  fitness class
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'admin'})
 
+    #Each group fitness class need to assign to one personal trainer
+    trainer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'trainer'},
+        related_name='group_classes'
+    )
     def __str__(self):
         return f"{self.title} on {self.date.strftime('%Y-%m-%d %H:%M')}"
 
@@ -48,7 +62,7 @@ class Booking(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,default='confirmed')
     member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'member'})
     fitness_class = models.ForeignKey(GroupFitnessClass, on_delete=models.CASCADE, related_name='bookings')
-    booked_at = models.DateTimeField()
+    booked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('member', 'fitness_class')
@@ -59,8 +73,13 @@ class Booking(models.Model):
 class MemberProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='member_profile')
     phone = models.CharField(max_length=20, blank=True, null=True)
-    join_date = models.DateTimeField()
-    is_approved = models.BooleanField(default=False)
+    join_date = models.DateTimeField(auto_now_add=True)
+    # membership_end = models.DateField(default=lambda: timezone.now().date() + timedelta(days=365))
+    #is_approved = models.BooleanField(default=False)
+
+    # def is_active(self):
+    #     from datetime import date
+    #     return self.membership_end >= date.today()
 
     def __str__(self):
         return self.user.username
@@ -72,7 +91,7 @@ class TrainerProfile(models.Model):
     price_per_hour = models.FloatField(blank=True, null=True)
     photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    is_approved = models.BooleanField(default=False)
+    #is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

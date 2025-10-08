@@ -9,15 +9,21 @@ urlpatterns = [
     path('register/gym_member/', views.gm_register, name='gm_register'),
     path('register/personal_trainer/', views.pt_register, name='pt_register'),
 
-
+    # Member dashboard urls
     path('dashboard/member/', views.member_dashboard, name='member_dashboard'),
+    path('dashboard/member/class/', views.member_class, name='member_class'),
+    path('dashboard/member/bookings/', views.member_booking, name='member_booking'),
     path('dashboard/member/book/<int:class_id>/', views.book_class, name='book_class'),
-    path('dashboard/member/cancel/<int:class_id>/', views.cancel_booking, name='cancel_booking'),
+    path('dashboard/member/cancel/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
 
 
+    # Trainer dashboard urls
     path('dashboard/trainer/', views.trainer_dashboard, name='trainer_dashboard'),
+    path('user/dashboard/trainer/class/', views.trainer_class, name='trainer_class'),
+    path('user/dashboard/trainer/availability/', views.trainer_availability, name='trainer_availability'),
 
 
+    # Admin dashboard urls
     path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),
     path('dashboard/admin/classes/', views.manage_group_fitness_class, name='manage_group_fitness_class'),
     path('dashboard/admin/classes/add/', views.add_group_fitness_class, name='add_group_fitness_class'),

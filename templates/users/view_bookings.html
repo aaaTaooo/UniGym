@@ -11,6 +11,7 @@
             <th>Date</th>
             <th>Location</th>
             <th>Booked At</th>
+            <th>Trainer</th>
             <th>Action</th>
         </tr>
 
@@ -22,6 +23,13 @@
             <td>{{ b.fitness_class.date|date:"Y-m-d H:i" }}</td>
             <td>{{ b.fitness_class.location }}</td>
             <td>{{ b.booked_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                {% if b.fitness_class.trainer %}
+                    {{ b.fitness_class.trainer.username }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
             <td>
                 {% if b.status != 'cancelled' %}
                 <form action="{% url 'cancel_booking' b.id %}" method="post">

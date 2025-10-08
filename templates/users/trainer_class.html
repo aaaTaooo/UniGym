@@ -1,0 +1,29 @@
+{% extends 'users/trainer_dashboard.html' %}
+{% block content %}
+    <h2>My Group Fitness Classes</h2>
+    <hr>
+    {% if my_classes %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Booked</th>
+                <th>Spots Left</th>
+            </tr>
+            {% for c in my_classes %}
+                <tr>
+                    <td>{{ c.title }}</td>
+                    <td>{{ c.date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ c.location }}</td>
+                    <td>{{ c.capacity }}</td>
+                    <td>{{ c.booked_count }}</td>
+                    <td>{{ c.spots_left }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You are not assigned to any group fitness class yet.</p>
+    {% endif %}
+{% endblock %}

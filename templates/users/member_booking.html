@@ -1,0 +1,27 @@
+{% extends 'users/member_dashboard.html' %}
+{% block content %}
+    <h2>Booked Group Fitness Class</h2>
+    <ul>
+        {% for b in bookings %}
+            <li>
+                <strong>{{ b.fitness_class.title }}</strong>
+                - {{ b.fitness_class.date|date:"Y-m-d H:i" }}
+                - {{ b.fitness_class.location }}
+                - Trainer: {{ b.fitness_class.trainer.username }}
+                - Status: {{ b.status }}
+                <br>
+                <a href="{% url 'cancel_booking' b.id %}">Cancel booking</a>
+            </li>
+        {% empty %}
+            <li>No booked class</li>
+        {% endfor %}
+    </ul>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -10,6 +10,7 @@
         <th>Location</th>
         <th>Capacity</th>
         <th>Booked</th>
+        <th>Trainer</th>
         <th>Actions</th>
     </tr>
     {% for c in classes %}
@@ -19,6 +20,13 @@
         <td>{{ c.location }}</td>
         <td>{{ c.capacity }}</td>
         <td>{{ c.booked_count }}</td>
+        <td>
+            {% if c.trainer %}
+                {{ c.trainer.username }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
         <td>
             <a href="{% url 'edit_group_fitness_class' c.id %}"> Edit</a>
             <a href="{% url 'delete_group_fitness_class' c.id %}"> Delete</a>

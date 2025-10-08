@@ -43,5 +43,5 @@ class AvailabilityForm(forms.ModelForm):
 class GroupFitnessClassForm(forms.ModelForm):
     class Meta:
         model = GroupFitnessClass
-        fields = ['title', 'description', 'date', 'location', 'capacity']
+        fields = ['title', 'description', 'date', 'location', 'capacity', 'trainer']
         widgets = {'date': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
