@@ -15,6 +15,7 @@
             <li><a href="{% url 'member_class' %}">Available Group Fitness Classes</a></li>
             <li><a href="{% url 'member_booking' %}">My Bookings</a></li>
             <li><a href="{% url 'member_trainer_list' %}">Personal Trainers</a></li>
+            <li><a href="{% url 'update_member_profile' %}">Update Profile</a></li>
         </ul>
     </nav>
 
@@ -22,17 +23,18 @@
     {% block content %}
         <h2>Your member Profile</h2>
         {% if profile %}
-            <p>Membership Start: {{ profile.join_date }}</p>
-{#            <p>Membership End: {{ profile.membership_end }}</p>#}
-{#            <p>Status:#}
-{#            {% if profile.is_active %}#}
-{#                <span>Active</span>#}
-{#            {% else %}#}
-{#                <span>Expired</span>#}
-{#            {% endif %}#}
-{#            </p>#}
+            <p><strong>Join Date:</strong> {{ profile.join_date }}</p>
+            <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+            <p><strong>Gender:</strong> {{ profile.gender }}</p>
+            <p><strong>Fitness Goal:</strong> {{ profile.fitness_goal }}</p>
+            <p><strong>Current Height:</strong> {{ profile.height }} cm</p>
+            <p><strong>Current Weight:</strong> {{ profile.weight }} kg</p>
+            <p><strong>Contact Email:</strong> {{ profile.email }}</p>
+            <p><strong>Contact Phone number:</strong> {{ profile.phone }}</p>
+            <p><strong>Emergency Contact:</strong> {{ profile.emergency_contact_name }}</p>
+            <p><strong>Emergency Contact Number:</strong> {{ profile.emergency_contact_phone }}</p>
         {% else %}
-            <p>No member profile to display.</p>
+            <p>No member profile found.</p>
         {% endif %}
     {% endblock %}
 

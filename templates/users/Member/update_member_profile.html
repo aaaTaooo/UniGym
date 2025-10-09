@@ -1,0 +1,12 @@
+{% extends 'users/Member/member_dashboard.html' %}
+{% block content %}
+    <h2>Update Your Member Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <a href="{% url 'member_dashboard' %}">Back to Dashboard</a>
+{% endblock %}

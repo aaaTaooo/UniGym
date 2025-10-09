@@ -1,0 +1,110 @@
+{% extends "UniGym/base_pattern.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <section>
+        <div>
+            <h2>Welcome to UniGym</h2>
+            <p>Your journey to fitness starts here.</p>
+            <a href="{% url 'login_page' %}">Login Now</a>
+        </div>
+    </section>
+
+    <section>
+    <hr>
+        <h3>Our Popular Group Fitness Classes</h3>
+        <div>
+            <div>
+                <h4>Body Pump</h4>
+                <p>Build muscle and boost endurance with our advanced equipment.</p>
+            </div>
+            <div>
+                <h4>Warm Yoga</h4>
+                <p>Relax your mind and body through professional yoga sessions.</p>
+            </div>
+            <div>
+                <h4>Bike heap</h4>
+                <p>Improve heart health with our high-energy bike classes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+    <hr>
+    <div>
+        <h3>Meet Our Trainers</h3>
+        <div>
+            <div>
+                <img src="/media/trainer_photos/Emmalu.png" alt="EmmaLu">
+                <h4>Emma Lu</h4>
+                <p>Certified Strength Coach</p>
+            </div>
+            <div>
+                <img src="/media/trainer_photos/Xuanzhang.png" alt="XuanZhang">
+                <h4>Xuan Zhang</h4>
+                <p>Yoga & Wellness Expert</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+{#{% extends "UniGym/base_pattern.html" %}#}
+{#{% block title %}Home{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<!-- Hero Section -->#}
+{#<section class="bg-[url('https://images.unsplash.com/photo-1571019613576-2b9b6dce9b91')] bg-cover bg-center text-white h-[70vh] flex items-center justify-center">#}
+{#    <div class="bg-black bg-opacity-50 p-8 rounded-lg text-center">#}
+{#        <h2 class="text-4xl font-bold mb-4">Welcome to UniGym</h2>#}
+{#        <p class="text-lg mb-6">Your journey to fitness starts here.</p>#}
+{#        <a href="{% url 'login_page' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg">Login Now</a>#}
+{#    </div>#}
+{#</section>#}
+{##}
+{#<!-- Services Section -->#}
+{#<section class="max-w-6xl mx-auto py-16 px-6">#}
+{#    <h3 class="text-3xl font-semibold text-center mb-10">Our Popular Programs</h3>#}
+{#    <div class="grid md:grid-cols-3 gap-8">#}
+{#        <div class="bg-white shadow-lg p-6 rounded-lg">#}
+{#            <h4 class="text-xl font-bold mb-2">Strength Training</h4>#}
+{#            <p>Build muscle and boost endurance with our advanced equipment.</p>#}
+{#        </div>#}
+{#        <div class="bg-white shadow-lg p-6 rounded-lg">#}
+{#            <h4 class="text-xl font-bold mb-2">Yoga & Flexibility</h4>#}
+{#            <p>Relax your mind and body through professional yoga sessions.</p>#}
+{#        </div>#}
+{#        <div class="bg-white shadow-lg p-6 rounded-lg">#}
+{#            <h4 class="text-xl font-bold mb-2">Cardio Programs</h4>#}
+{#            <p>Improve heart health with our high-energy cardio classes.</p>#}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
+{##}
+{#<!-- Trainers Preview -->#}
+{#<section class="bg-gray-100 py-16">#}
+{#    <div class="max-w-6xl mx-auto text-center px-6">#}
+{#        <h3 class="text-3xl font-semibold mb-10">Meet Our Trainers</h3>#}
+{#        <div class="grid md:grid-cols-3 gap-8">#}
+{#            <div class="bg-white p-6 rounded-lg shadow-md">#}
+{#                <img src="/media/trainer_photos/Emmalu.png" alt="Trainer 1" class="w-full h-48 object-cover rounded-lg mb-4">#}
+{#                <h4 class="text-xl font-bold">Emma Lu</h4>#}
+{#                <p>Certified Strength Coach</p>#}
+{#            </div>#}
+{#            <div class="bg-white p-6 rounded-lg shadow-md">#}
+{#                <img src="/media/trainer_photos/Xuanzhang.png" alt="Trainer 2" class="w-full h-48 object-cover rounded-lg mb-4">#}
+{#                <h4 class="text-xl font-bold">Xuan Zhang</h4>#}
+{#                <p>Yoga & Wellness Expert</p>#}
+{#            </div>#}
+{#            <div class="bg-white p-6 rounded-lg shadow-md">#}
+{#                <img src="/media/trainer_photos/trainer3.jpg" alt="Trainer 3" class="w-full h-48 object-cover rounded-lg mb-4">#}
+{#                <h4 class="text-xl font-bold">Liam Johnson</h4>#}
+{#                <p>Cardio Specialist</p>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
+{#{% endblock %}#}

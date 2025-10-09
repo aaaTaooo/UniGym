@@ -20,8 +20,8 @@
 
     <hr>
     {% block content %}
+        <h2>Your Profile Details</h2>
         {% if trainer_profile %}
-            <h2>Your Profile Details</h2>
 
             {% if trainer_profile.photo %}
                 <img src="{{ trainer_profile.photo.url }}" alt="Your photo" width ="300">
@@ -29,10 +29,14 @@
                 <p>No Photo uploaded yet.</p>
             {% endif %}
 
-            <p><strong>Specialization:</strong> {{ trainer_profile.specialization }}</p>
             <p><strong>Bio:</strong> {{ trainer_profile.bio }}</p>
+            <p><strong>Specialization:</strong> {{ trainer_profile.specialization }}</p>
+            <p><strong>Certifications:</strong> {{ trainer_profile.certifications }}</p>
+            <p><strong>Experience:</strong> {{ trainer_profile.years_of_experience }} years</p>
+            <p><strong>Languages:</strong> {{ trainer_profile.languages }}</p>
             <p><strong>Price per hour:</strong> ${{ trainer_profile.price_per_hour }}/Hour</p>
             <p><strong>Contact Email:</strong> {{ trainer_profile.email }}</p>
+            <p><strong>Contact Phone number:</strong> {{ trainer_profile.phone }}</p>
 
         {% else %}
             <p>No profile found. Please <a href="{% url 'update_trainer_profile' %}">create or update your profile</a>.</p>

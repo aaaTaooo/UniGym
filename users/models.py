@@ -5,7 +5,7 @@ from django.db import models
 
 
 # Create your models here.
-#User model
+# User model
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
     ('member', 'Member'),
@@ -19,6 +19,42 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f'{self.username} ({self.role})'
 
+# Member Profile model
+class MemberProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='member_profile')
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    join_date = models.DateTimeField(auto_now_add=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
+                              blank=True, null=True)
+    fitness_goal = models.CharField(max_length=100, blank=True, null=True)
+    height = models.FloatField(blank=True, null=True, help_text='Height in cm')
+    weight = models.FloatField(blank=True, null=True, help_text='Weight in kg')
+    emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
+    emergency_contact_phone = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+# Trainer Profile model
+class TrainerProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='trainer_profile')
+    bio = models.TextField(blank=True, null=True)
+    specialization = models.CharField(max_length=100, blank=True, null=True)
+    price_per_hour = models.FloatField(blank=True, null=True)
+    photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    certifications = models.TextField(blank=True, null=True)
+    years_of_experience = models.PositiveIntegerField(blank=True, null=True)
+    languages = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=[('male', 'Male'), ('female', 'Female'), ('other', 'Other')],
+                              blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
 #Group fitness class model
 class GroupFitnessClass(models.Model):
     title = models.CharField(max_length=100)
@@ -26,7 +62,10 @@ class GroupFitnessClass(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
     capacity = models.IntegerField()
-
+    duration = models.IntegerField(default=30)
+    difficulty = models.CharField(max_length=10, choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')],
+                                  default='easy')
+    equipment = models.CharField(max_length=100, default='')
 
     #only admin account can create group  fitness class
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'admin'})
@@ -52,6 +91,7 @@ class GroupFitnessClass(models.Model):
     def booked_count(self):
         return self.bookings.count()
 
+# Group fitness class booking model
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('confirmed', 'Confirmed'),
@@ -68,25 +108,7 @@ class Booking(models.Model):
     def __str__(self):
         return f"{self.member.username} booked {self.fitness_class.title}"
 
-class MemberProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='member_profile')
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    join_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.user.username
-
-class TrainerProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='trainer_profile')
-    bio = models.TextField(blank=True, null=True)
-    specialization = models.CharField(max_length=100, blank=True, null=True)
-    price_per_hour = models.FloatField(blank=True, null=True)
-    photo = models.ImageField(upload_to='trainer_photos/', blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username
-
+# Trainer Availability model
 class Availability(models.Model):
     trainer = models.ForeignKey("users.TrainerProfile", on_delete=models.CASCADE, related_name='availabilities')
     date = models.DateTimeField()

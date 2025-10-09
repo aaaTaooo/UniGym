@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 
 from users.forms import GymMemberRegistrationForm, PersonalTrainerRegistrationForm, GroupFitnessClassForm, \
-    TrainerUpdateForm
+    TrainerUpdateForm, MemberUpdateForm
 from users.models import GroupFitnessClass, Booking, TrainerProfile, Availability, CustomUser, MemberProfile
 from .forms import AvailabilityForm
 
@@ -136,6 +136,23 @@ def member_trainer_detail(request, trainer_id):
         "trainer_profile":trainer_profile,
         "availabilities":availabilities,
     })
+
+# Member update profile
+@login_required
+@user_passes_test(member_check)
+def update_member_profile(request):
+    member_profile = get_object_or_404(MemberProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = MemberUpdateForm(request.POST, instance=member_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('member_trainer_list')
+    else:
+        form = MemberUpdateForm(instance=member_profile)
+
+    return render(request, 'users/Member/update_member_profile.html', {'form':form})
 
 # ===================================Trainers related functions===================================
 @login_required

@@ -5,10 +5,14 @@
         <img src="{{ trainer_profile.photo.url }}" width="200">
     {% endif %}
 
-    <p><strong>Specialization: </strong>{{ trainer_profile.specialization }}</p>
-    <p><strong>About me: </strong>{{ trainer_profile.bio }}</p>
-    <p><strong>Price per Hour: </strong>${{ trainer_profile.price_per_hour }}/Hour</p>
-    <p><strong>Contact: </strong>{{ trainer_profile.email }}</p>
+    <p><strong>Bio:</strong> {{ trainer_profile.bio }}</p>
+    <p><strong>Specialization:</strong> {{ trainer_profile.specialization }}</p>
+    <p><strong>Certifications:</strong> {{ trainer_profile.certifications }}</p>
+    <p><strong>Experience:</strong> {{ trainer_profile.years_of_experience }} years</p>
+    <p><strong>Languages:</strong> {{ trainer_profile.languages }}</p>
+    <p><strong>Price per hour:</strong> ${{ trainer_profile.price_per_hour }}/Hour</p>
+    <p><strong>Contact Email:</strong> {{ trainer_profile.email }}</p>
+    <p><strong>Contact Phone number:</strong> {{ trainer_profile.phone }}</p>
 
     <h2>Availability</h2>
     {% if availabilities %}

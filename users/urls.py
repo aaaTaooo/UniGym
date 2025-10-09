@@ -15,15 +15,16 @@ urlpatterns = [
     path('dashboard/member/bookings/', views.member_booking, name='member_booking'),
     path('dashboard/member/book/<int:class_id>/', views.book_class, name='book_class'),
     path('dashboard/member/cancel/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
-    path("dashboard/member/trainers/", views.member_trainer_list, name="member_trainer_list"),
-    path("dashboard/member/trainers/<int:trainer_id>/", views.member_trainer_detail, name='member_trainer_detail'),
+    path('dashboard/member/trainers/', views.member_trainer_list, name="member_trainer_list"),
+    path('dashboard/member/trainers/<int:trainer_id>/', views.member_trainer_detail, name='member_trainer_detail'),
+    path('dashboard/member/update', views.update_member_profile, name='update_member_profile'),
 
 
     # Trainer dashboard urls
     path('dashboard/trainer/', views.trainer_dashboard, name='trainer_dashboard'),
-    path('user/dashboard/trainer/class/', views.trainer_class, name='trainer_class'),
-    path('user/dashboard/trainer/availability/', views.trainer_availability, name='trainer_availability'),
-    path('user/dashboard/trainer/update/', views.update_trainer_profile, name='update_trainer_profile'),
+    path('dashboard/trainer/class/', views.trainer_class, name='trainer_class'),
+    path('dashboard/trainer/availability/', views.trainer_availability, name='trainer_availability'),
+    path('dashboard/trainer/update/', views.update_trainer_profile, name='update_trainer_profile'),
 
 
     # Admin dashboard urls
