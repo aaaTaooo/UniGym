@@ -1,21 +1,39 @@
 {% extends 'users/Member/member_dashboard.html' %}
 {% block content %}
     <h2>Booked Group Fitness Class</h2>
-    <ul>
-        {% for b in bookings %}
-            <li>
-                <strong>{{ b.fitness_class.title }}</strong>
-                - {{ b.fitness_class.date|date:"Y-m-d H:i" }}
-                - {{ b.fitness_class.location }}
-                - Trainer: {{ b.fitness_class.trainer.username }}
-                - Status: {{ b.status }}
-                <br>
-                <a href="{% url 'cancel_booking' b.id %}">Cancel booking</a>
-            </li>
-        {% empty %}
-            <li>No booked class</li>
-        {% endfor %}
-    </ul>
+    <hr>
+    {% if bookings %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Duration</th>
+                <th>Equipment</th>
+                <th>Difficulty</th>
+                <th>Trainer</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for b in bookings %}
+                <tr>
+                    <td>{{ b.fitness_class.title }}</td>
+                    <td>{{ b.fitness_class.date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ b.fitness_class.location }}</td>
+                    <td>{{ b.fitness_class.duration }}</td>
+                    <td>{{ b.fitness_class.equipment }}</td>
+                    <td>{{ b.fitness_class.difficulty }}</td>
+                    <td>{{ b.fitness_class.trainer.username }}</td>
+                    <td>{{ b.status }}</td>
+                    <td>
+                        <a href="{% url 'cancel_booking' b.id %}">Cancel booking</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No booked class.</p>
+    {% endif %}
 
     {% if messages %}
         <ul>

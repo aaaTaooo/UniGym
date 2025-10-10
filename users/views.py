@@ -13,9 +13,12 @@ def gm_register(request):
     if request.method == 'POST':
         form = GymMemberRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            if user.role == 'member':
-                MemberProfile.objects.create(user=user)
+            form.save()
+            # user = form.save(commit=False)
+            # user.role = 'member'
+            # user.save()
+            # MemberProfile.objects.get_or_create(user=user)
+
             messages.success(request, 'Membership account created successfully! Please wait admin to approve.')
             return redirect('login')
     else:
@@ -26,6 +29,11 @@ def pt_register(request):
         form = PersonalTrainerRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            # user = form.save(commit=False)
+            # user.role = 'trainer'
+            # user.save()
+            # TrainerProfile.objects.get_or_create(user=user)
+
             messages.success(request, 'Trainer account created successfully! Please wait admin to approve.')
             return redirect('login')
     else:

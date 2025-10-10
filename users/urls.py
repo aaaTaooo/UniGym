@@ -34,7 +34,7 @@ urlpatterns = [
     path('dashboard/admin/classes/add/', views.add_group_fitness_class, name='add_group_fitness_class'),
     path('dashboard/admin/classes/edit/<int:class_id>/', views.edit_group_fitness_class, name='edit_group_fitness_class'),
     path('dashboard/admin/classes/delete/<int:class_id>/', views.delete_group_fitness_class, name='delete_group_fitness_class'),
-    path('dashboard/admin/boookings/', views.view_bookings, name='view_bookings'),
+    path('dashboard/admin/bookings/', views.view_bookings, name='view_bookings'),
     path('dashboard/admin/bookings/<int:booking_id>/cancel/', views.admin_cancel_booking, name='admin_cancel_booking'),
 
 

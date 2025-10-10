@@ -1,16 +1,41 @@
 {% extends 'users/Member/member_dashboard.html' %}
 {% block content %}
     <h2>Available Group Fitness Classes</h2>
-    <ul>
-        {% for class in available_classes %}
-            <li>
-                {{ class.title }} - {{ class.date }} ({{ class.booked_count }}/{{ class.capacity }})
-                <a href="{% url 'book_class' class.id %}">Book</a>
-            </li>
-        {% empty %}
-            <li>No available class at the moment</li>
-        {% endfor %}
-    </ul>
+    <hr>
+    {% if available_classes %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Duration</th>
+                <th>Equipment</th>
+                <th>Difficulty</th>
+                <th>Capacity</th>
+                <th>Booked</th>
+                <th>Spots Left</th>
+                <th>Action</th>
+            </tr>
+            {% for class in available_classes %}
+                <tr>
+                    <td>{{ class.title }}</td>
+                    <td>{{ class.date|date:"Y-m-d H:i" }}</td>
+                    <td>{{ class.location }}</td>
+                    <td>{{ class.duration }}</td>
+                    <td>{{ class.equipment }}</td>
+                    <td>{{ class.difficulty }}</td>
+                    <td>{{ class.capacity }}</td>
+                    <td>{{ class.booked_count }}</td>
+                    <td>{{ class.spots_left }}</td>
+                    <td>
+                        <a href="{% url 'book_class' class.id %}">Book</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No available class at the moment.</p>
+    {% endif %}
 
     {% if messages %}
         <ul>

@@ -65,7 +65,7 @@ class GroupFitnessClass(models.Model):
     duration = models.IntegerField(default=30)
     difficulty = models.CharField(max_length=10, choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')],
                                   default='easy')
-    equipment = models.CharField(max_length=100, default='')
+    equipment = models.CharField(max_length=100, default='None')
 
     #only admin account can create group  fitness class
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'admin'})

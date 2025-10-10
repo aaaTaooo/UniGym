@@ -10,12 +10,17 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Emergency Contact</th>
                 <th>Actions</th>
             </tr>
         {% for m in pending_members %}
             <tr>
                 <td>{{ m.user.username }}</td>
-                <td>{{ m.user.email }}</td>
+                <td>{{ m.email }}</td>
+                <td>{{ m.phone }}</td>
+                <td>{{ m.gender }}</td>
                 <td>
                     <form method="post">
                         {% csrf_token %}
@@ -40,14 +45,20 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Phone</th>
                 <th>Specialization</th>
+                <th>Experience (yrs)</th>
+                <th>Gender</th>
                 <th>Actions</th>
             </tr>
             {% for t in pending_trainers %}
                 <tr>
                     <td>{{ t.user.username }}</td>
-                    <td>{{ t.user.email }}</td>
+                    <td>{{ t.email }}</td>
+                    <td>{{ t.phone }}</td>
                     <td>{{ t.specialization }}</td>
+                    <td>{{ t.years_of_experience }}</td>
+                    <td>{{ t.gender }}</td>
                     <td>
                         <form method="post">
                             {% csrf_token %}

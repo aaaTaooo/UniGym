@@ -3,8 +3,17 @@
     <h2>{{ action }} Group Fitness Class</h2>
 
     <form method="post">
-    {% csrf_token %}
-    {{  form.as_p }}
+        {% csrf_token %}
+        <p>{{ form.title.label_tag }} {{ form.title }}</p>
+        <p>{{ form.description.label_tag }} {{ form.description }}</p>
+        <p>{{ form.date.label_tag }} {{ form.date }}</p>
+        <p>{{ form.location.label_tag }} {{ form.location }}</p>
+        <p>{{ form.capacity.label_tag }} {{ form.capacity }}</p>
+        <p>{{ form.duration.label_tag }} {{ form.duration }}</p>
+        <p>{{ form.difficulty.label_tag }} {{ form.difficulty }}</p>
+        <p>{{ form.equipment.label_tag }} {{ form.equipment }}</p>
+        <p>{{ form.trainer.label_tag }} {{ form.trainer }}</p>
+
     <button type="submit">{{ action }}</button>
     </form>
 

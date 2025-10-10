@@ -1,13 +1,23 @@
 {% extends 'UniGym/base_pattern.html' %}
-{% block title %}Register{% endblock %}
+{% block title %}Register as Member{% endblock %}
 
 {% block content %}
     <h2>Register as Gym Member</h2>
     <form method="post">
         {% csrf_token  %}
 
-        {#registration form#}
-        {{ form.as_p }}
+        <p>{{ form.username.label_tag }} {{ form.username }}</p>
+        <p>{{ form.password1.label_tag }} {{ form.password1 }}</p>
+        <p>{{ form.password2.label_tag }} {{ form.password2 }}</p>
+        <p>{{ form.email.label_tag }} {{ form.email }}</p>
+        <p>{{ form.phone.label_tag }} {{ form.phone }}</p>
+        <p>{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</p>
+        <p>{{ form.gender.label_tag }} {{ form.gender }}</p>
+        <p>{{ form.fitness_goal.label_tag }} {{ form.fitness_goal }}</p>
+        <p>{{ form.height.label_tag }} {{ form.height }}</p>
+        <p>{{ form.weight.label_tag }} {{ form.weight }}</p>
+        <p>{{ form.emergency_contact_name.label_tag }} {{ form.emergency_contact_name }}</p>
+        <p>{{ form.emergency_contact_phone.label_tag }} {{ form.emergency_contact_phone }}</p>
         <button type="submit">Register</button>
     </form>
 

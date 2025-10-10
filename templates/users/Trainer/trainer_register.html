@@ -7,7 +7,18 @@
         {% csrf_token  %}
 
         {#registration form#}
-        {{ form.as_p }}
+        <p>{{ form.username.label_tag }} {{ form.username }}</p>
+        <p>{{ form.password1.label_tag }} {{ form.password1 }}</p>
+        <p>{{ form.password2.label_tag }} {{ form.password2 }}</p>
+        <p>{{ form.email.label_tag }} {{ form.email }}</p>
+        <p>{{ form.phone.label_tag }} {{ form.phone }}</p>
+        <p>{{ form.bio.label_tag }} {{ form.bio }}</p>
+        <p>{{ form.specialization.label_tag }} {{ form.specialization }}</p>
+        <p>{{ form.price_per_hour.label_tag }} {{ form.price_per_hour }}</p>
+        <p>{{ form.certifications.label_tag }} {{ form.certifications }}</p>
+        <p>{{ form.years_of_experience.label_tag }} {{ form.years_of_experience }}</p>
+        <p>{{ form.languages.label_tag }} {{ form.languages }}</p>
+        <p>{{ form.gender.label_tag }} {{ form.gender }}</p>
         <button type="submit">Register</button>
     </form>
 

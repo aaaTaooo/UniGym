@@ -109,8 +109,11 @@ class TrainerUpdateForm(forms.ModelForm):
 class GroupFitnessClassForm(forms.ModelForm):
     class Meta:
         model = GroupFitnessClass
-        fields = ['title', 'description', 'date', 'location', 'capacity', 'trainer']
-        widgets = {'date': forms.DateTimeInput(attrs={'type': 'datetime-local'})}
+        fields = ['title', 'description', 'date',
+                  'location', 'capacity', 'duration',
+                  'difficulty','equipment', 'trainer']
+        widgets = {'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+                   'description':forms.Textarea(attrs={'rows': 3}),}
 
 # Trainer update availability form
 class AvailabilityForm(forms.ModelForm):
