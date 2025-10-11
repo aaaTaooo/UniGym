@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
@@ -128,4 +130,26 @@ class GroupFitnessClassForm(forms.ModelForm):
 class AvailabilityForm(forms.ModelForm):
     class Meta:
         model = Availability
-        fields = ['date', 'start_time', 'end_time']
+        fields = ['date', 'start_time', 'end_time', 'is_available']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        start_time = cleaned_data.get('start_time')
+        end_time = cleaned_data.get('end_time')
+
+        if date:
+            date_datetime = datetime.datetime.combine(date, datetime.time.min, tzinfo=timezone.get_current_timezone())
+            if date_datetime < timezone.now():
+                self.add_error('date', 'Date cannot be in the past')
+
+        if start_time and end_time:
+            if end_time <= start_time:
+                self.add_error('end_time', 'End time must be after start time')
+
+        return cleaned_data

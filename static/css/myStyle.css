@@ -146,6 +146,16 @@ button:hover {
     background: #1e40af;
 }
 
+table td form {
+    display: inline-block;
+    margin: 0 0.2rem;
+}
+
+table td button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -173,7 +183,7 @@ ul li button {
 }
 .actions {
     display: flex;
-    gap: 0.8rem;
+    gap: 0.5rem;
 }
 
 footer {

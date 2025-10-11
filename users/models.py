@@ -118,7 +118,7 @@ class Booking(models.Model):
 # Trainer Availability model
 class Availability(models.Model):
     trainer = models.ForeignKey("users.TrainerProfile", on_delete=models.CASCADE, related_name='availabilities')
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(default=timezone.now)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
     is_available = models.BooleanField(default=True)

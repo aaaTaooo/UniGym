@@ -204,25 +204,26 @@ def trainer_class(request):
 @user_passes_test(trainer_check)
 def trainer_availability(request):
     trainer_profile = TrainerProfile.objects.filter(user=request.user).first()
-    availabilities = trainer_profile.availabilities.all()
-    form = None
+    availabilities = trainer_profile.availabilities.all().order_by('date', 'start_time')
+    form = AvailabilityForm()
+    action = "Add"
 
     if request.method == 'POST':
         # Delete availability
         if 'delete_id' in request.POST:
-            availability_id = request.POST.get('delete_id')
-            availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
+            availability = get_object_or_404(Availability, id=request.POST['delete_id'], trainer=trainer_profile)
             availability.delete()
-            return redirect('trainer_dashboard')
+            messages.success(request, "Availability deleted successfully.")
+            return redirect('trainer_availability')
 
         # Edit availability
         elif 'edit_id' in request.POST:
-            availability_id = request.POST.get('edit_id')
-            availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
+            availability = get_object_or_404(Availability, id=request.POST['edit_id'], trainer=trainer_profile)
             form = AvailabilityForm(instance=availability)
+            action = "Edit"
 
         # Add and update availability
-        elif 'availability_id' in request.POST or 'date' in request.POST:
+        elif 'save_availability' in request.POST:
             availability_id = request.POST.get('availability_id')
             if availability_id:
                 availability = get_object_or_404(Availability, id=availability_id, trainer=trainer_profile)
@@ -234,15 +235,18 @@ def trainer_availability(request):
                 availability = form.save(commit=False)
                 availability.trainer = trainer_profile
                 availability.save()
-                return redirect('trainer_dashboard')
-
-    if not form:
-        form = AvailabilityForm()
+                messages.success(request, f"Availability {'updated' if availability_id else 'added'} successfully.")
+                return redirect('trainer_availability')
+            else:
+                print(form.errors)
+                action = "Edit" if availability_id else "Add"
 
     return render(request, 'users/Trainer/trainer_availability.html', {
         "trainer_profile": trainer_profile,
         "availabilities": availabilities,
         "form": form,
+        'action': action,
+        'now': timezone.localtime(),
     })
 
 @login_required
