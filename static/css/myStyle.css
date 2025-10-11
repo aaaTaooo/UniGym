@@ -1,0 +1,224 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fb;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+nav {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+nav a {
+    color: #fbbf24;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+nav a:hover {
+    color: #fbbf24;
+}
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    flex: 1;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+a:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 2rem 0;
+}
+
+section h2, section h3, h2, h3 {
+    color: #1e3a8a;
+}
+
+section p {
+    color: #444;
+}
+
+section div {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #f1f5f9;
+    flex: 1 1 180px;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #1d4ed8;
+}
+
+form {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 1.5rem auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    transition: border-color 0.2s ease;
+}
+
+form input:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+button {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #1e40af;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    background: #f1f5f9;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+
+
+footer {
+    text-align: center;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1.2rem 0;
+    margin-top: 3rem;
+}
+
+footer div a {
+    color: #fbbf24;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer div a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-around;
+}
+
+.profile-info p {
+    margin: 0.4rem 0;
+}
+
+img {
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    nav a {
+        display: inline-block;
+        margin: 0.4rem;
+    }
+
+    main {
+        margin: 1rem;
+        padding: 1.2rem;
+    }
+
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+    }
+}

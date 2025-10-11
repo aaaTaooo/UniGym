@@ -1,5 +1,5 @@
 {% extends 'users/Member/member_dashboard.html' %}
-{% block content %}
+{% block dashboard_content %}
     <h2>{{ trainer_profile.user.username }}</h2>
     {% if trainer_profile.photo %}
         <img src="{{ trainer_profile.photo.url }}" width="200">

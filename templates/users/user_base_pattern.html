@@ -3,19 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>UniGym | {% block title %}{% endblock %}</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/myStyle.css' %}">
 </head>
 <body>
 <header>
     <div>
-        <h1>UniGym</h1>
+        <h1>Welcome, {{ user.username }} ({% block title %}{% endblock %})</h1>
         <nav>
             <a href="{% url 'home_page' %}">Home</a>
-            <a href="{% url 'about_page' %}">About Us</a>
-            <a href="{% url 'services_page' %}">Services</a>
             <a href="{% url 'contact_page' %}">Contact Us</a>
-            <a href="{% url 'login' %}">User Login</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </nav>
     </div>
 </header>

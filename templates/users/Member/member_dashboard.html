@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Gym Member Dashboard</title>
-</head>
-<body>
-    <h1>Welcome, {{ user.username }} (Gym Member)</h1>
-    <p>Contact Email: {{ user.email }}</p>
+{% extends "users/user_base_pattern.html" %}
+{% block title %}Gym Member{% endblock %}
+
+{% block content %}
+        <p>Contact Email: {{ profile.email }}</p>
 
     <hr>
     <nav>
@@ -20,7 +16,7 @@
     </nav>
 
     <hr>
-    {% block content %}
+    {% block dashboard_content %}
         <h2>Your member Profile</h2>
         {% if profile %}
             <p><strong>Join Date:</strong> {{ profile.join_date }}</p>
@@ -38,8 +34,5 @@
         {% endif %}
     {% endblock %}
 
-
-
     <a href="{% url 'logout' %}">Logout</a>
-</body>
-</html>
+{% endblock %}

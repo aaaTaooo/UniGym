@@ -42,6 +42,18 @@ def pt_register(request):
 
 # Users login page
 def custom_login(request):
+    # if request.user.is_authenticated:
+    #     logout(request)
+    if request.user.is_authenticated:
+        if request.user.role == 'admin':
+            return redirect('admin_dashboard')
+        elif request.user.role == 'member':
+            return redirect('member_dashboard')
+        elif request.user.role == 'trainer':
+            return redirect('trainer_dashboard')
+        else:
+            return redirect('home_page')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -59,7 +71,7 @@ def custom_login(request):
                 elif user.role == 'trainer':
                     return redirect('trainer_dashboard')
                 else:
-                    return redirect('home')
+                    return redirect('home_page')
             else:
                 messages.error(request, 'Your registration is not approved yet.')
         else:
@@ -67,6 +79,7 @@ def custom_login(request):
     return render(request,'users/login.html')
 def custom_logout(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully.')
     return redirect('login')
 
 # User role checker
