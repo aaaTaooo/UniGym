@@ -13,6 +13,7 @@
                 <th>Capacity</th>
                 <th>Booked</th>
                 <th>Spots Left</th>
+                <th>Status</th>
             </tr>
             {% for c in my_classes %}
                 <tr>
@@ -24,6 +25,7 @@
                     <td>{{ c.capacity }}</td>
                     <td>{{ c.booked_count }}</td>
                     <td>{{ c.spots_left }}</td>
+                    <td>{{ c.status }}</td>
                 </tr>
             {% endfor %}
         </table>

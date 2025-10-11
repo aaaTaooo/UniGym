@@ -6,16 +6,34 @@
         {% csrf_token %}
         <p>{{ form.title.label_tag }} {{ form.title }}</p>
         <p>{{ form.description.label_tag }} {{ form.description }}</p>
-        <p>{{ form.date.label_tag }} {{ form.date }}</p>
+        <p>
+            {{ form.date.label_tag }}
+            <input type="datetime-local"
+                   class="form-control"
+                   name="{{ form.date.name }}"
+                   id="{{ form.date.id_for_label }}"
+                   min="{{ now|date:'Y-m-d\\TH:i' }}"
+                   value="{{ form.date.value|default_if_none:'' }}">
+        </p>
         <p>{{ form.location.label_tag }} {{ form.location }}</p>
         <p>{{ form.capacity.label_tag }} {{ form.capacity }}</p>
         <p>{{ form.duration.label_tag }} {{ form.duration }}</p>
         <p>{{ form.difficulty.label_tag }} {{ form.difficulty }}</p>
         <p>{{ form.equipment.label_tag }} {{ form.equipment }}</p>
+        <p>{{ form.status.label_tag }} {{ form.status }}</p>
         <p>{{ form.trainer.label_tag }} {{ form.trainer }}</p>
 
     <button type="submit">{{ action }}</button>
+    {% if form.errors %}
+        <ul style="color:red;">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li><strong>{{ field|capfirst }}</strong>: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
     </form>
 
-    <a href="{% url 'manage_group_fitness_class' %}"> Back to classes</a>
+    <a href="{% url 'manage_group_fitness_class' %}"> Back to classes |</a>
 {% endblock %}

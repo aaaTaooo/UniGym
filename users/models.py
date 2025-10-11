@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -66,6 +67,7 @@ class GroupFitnessClass(models.Model):
     difficulty = models.CharField(max_length=10, choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')],
                                   default='easy')
     equipment = models.CharField(max_length=100, default='None')
+    status = models.CharField(max_length=10, choices=[('available', 'Available'), ('finished', 'Finished')],default='available')
 
     #only admin account can create group  fitness class
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, limit_choices_to={'role': 'admin'})
@@ -91,6 +93,11 @@ class GroupFitnessClass(models.Model):
     def booked_count(self):
         return self.bookings.count()
 
+    def check_date(self):
+        if self.date < timezone.now() and self.status != 'finished':
+            self.status = 'finished'
+            self.save(update_fields=['status'])
+
 # Group fitness class booking model
 class Booking(models.Model):
     STATUS_CHOICES = [
@@ -111,7 +118,7 @@ class Booking(models.Model):
 # Trainer Availability model
 class Availability(models.Model):
     trainer = models.ForeignKey("users.TrainerProfile", on_delete=models.CASCADE, related_name='availabilities')
-    date = models.DateTimeField()
+    date = models.DateTimeField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
     is_available = models.BooleanField(default=True)

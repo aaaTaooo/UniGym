@@ -6,7 +6,7 @@
             <li>
                 <a href="{% url 'member_trainer_detail' trainer.id %}">
                     {% if trainer.photo %}
-                        <img src="{{ trainer.photo.url }}" width="100">
+                        <img src="{{ trainer.photo.url }}" width="110" height="140">
                     {% endif %}
                     {{ trainer.user.username }}
                 </a>
@@ -15,5 +15,5 @@
             <li>No trainers available</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'member_dashboard' %}">Back to Member Dashboard</a>
+    <a href="{% url 'member_dashboard' %}">Back to Member Dashboard |</a>
 {% endblock %}

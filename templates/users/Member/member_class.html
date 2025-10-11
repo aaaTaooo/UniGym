@@ -12,8 +12,9 @@
                 <th>Equipment</th>
                 <th>Difficulty</th>
                 <th>Capacity</th>
-                <th>Booked</th>
                 <th>Spots Left</th>
+                <th>Trainer</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
             {% for class in available_classes %}
@@ -25,8 +26,9 @@
                     <td>{{ class.equipment }}</td>
                     <td>{{ class.difficulty }}</td>
                     <td>{{ class.capacity }}</td>
-                    <td>{{ class.booked_count }}</td>
                     <td>{{ class.spots_left }}</td>
+                    <td>{{ class.trainer }}</td>
+                    <td>{{ class.status }}</td>
                     <td>
                         <a href="{% url 'book_class' class.id %}">Book</a>
                     </td>
@@ -44,4 +46,5 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <a href="{% url 'member_dashboard' %}">Back to Dashboard |</a>
 {% endblock %}

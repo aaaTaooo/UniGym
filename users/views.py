@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from users.forms import GymMemberRegistrationForm, PersonalTrainerRegistrationForm, GroupFitnessClassForm, \
     TrainerUpdateForm, MemberUpdateForm
@@ -106,14 +107,22 @@ def member_dashboard(request):
 @login_required
 @user_passes_test(member_check)
 def member_class(request):
-    available_classes = GroupFitnessClass.objects.exclude(bookings__member=request.user).order_by('date')
-    return render(request, 'users/Member/member_class.html', {'available_classes':available_classes})
+    profile = MemberProfile.objects.filter(user=request.user).first()
+    now = timezone.now()
+    available_classes = (GroupFitnessClass.objects.exclude(bookings__member=request.user)
+                         .filter(date__gte=now).order_by('date'))
+    return render(request,
+                  'users/Member/member_class.html',
+                  {'available_classes':available_classes, 'profile': profile,})
 
 @login_required
 @user_passes_test(member_check)
 def member_booking(request):
-    bookings = Booking.objects.filter(member=request.user).select_related('fitness_class', 'fitness_class__trainer').order_by('fitness_class__date')
-    return render(request, 'users/Member/member_booking.html', {'bookings': bookings})
+    profile = MemberProfile.objects.filter(user=request.user).first()
+    now = timezone.now()
+    bookings = (Booking.objects.filter(member=request.user, fitness_class__date__gte=now)
+                .select_related('fitness_class', 'fitness_class__trainer').order_by('fitness_class__date'))
+    return render(request, 'users/Member/member_booking.html', {'bookings': bookings,'profile': profile,})
 
 #booking group class
 @login_required
@@ -146,16 +155,19 @@ def cancel_booking(request, booking_id):
 
 # Trainer list for member to view
 def member_trainer_list(request):
+    profile = MemberProfile.objects.filter(user=request.user).first()
     trainers = TrainerProfile.objects.filter(user__role='trainer', user__is_approved=True)
-    return render(request, "users/Member/member_trainer_list.html", {'trainers':trainers})
+    return render(request, "users/Member/member_trainer_list.html", {'trainers':trainers, 'profile': profile})
 
 # Trainer details for member to view
 def member_trainer_detail(request, trainer_id):
+    profile = MemberProfile.objects.filter(user=request.user).first()
     trainer_profile = get_object_or_404(TrainerProfile, id=trainer_id)
     availabilities = trainer_profile.availabilities.all()
     return render(request, "users/Member/member_trainer_detail.html", {
-        "trainer_profile":trainer_profile,
-        "availabilities":availabilities,
+        'trainer_profile':trainer_profile,
+        'availabilities':availabilities,
+        'profile': profile,
     })
 
 # Member update profile
@@ -173,7 +185,7 @@ def update_member_profile(request):
     else:
         form = MemberUpdateForm(instance=member_profile)
 
-    return render(request, 'users/Member/update_member_profile.html', {'form':form})
+    return render(request, 'users/Member/update_member_profile.html', {'form':form, 'profile':member_profile})
 
 # ===================================Trainers related functions===================================
 @login_required
@@ -307,6 +319,8 @@ def manage_pending_user(request):
 @user_passes_test(admin_check)
 def manage_group_fitness_class(request):
     classes = GroupFitnessClass.objects.all().order_by('date')
+    for c in classes:
+        c.check_date()
     context = get_admin_stats()
     context['classes'] = classes
     return render(request, 'users/Admin/manage_group_fitness_class.html', context)
@@ -324,11 +338,14 @@ def add_group_fitness_class(request):
             group_class.save()
             messages.success(request, 'Successfully added a new group fitness class')
             return redirect('manage_group_fitness_class')
+        else:
+            print("Form errors:", form.errors)
     else:
         form = GroupFitnessClassForm()
 
     context['form'] = form
     context['action'] = 'Add'
+    context['now'] = timezone.localtime()
     return render(request, 'users/Admin/group_fitness_class_form.html', context)
 
 #Edit group fitness class

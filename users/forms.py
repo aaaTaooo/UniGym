@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.utils import timezone
+
 from users.models import CustomUser, Availability, GroupFitnessClass, TrainerProfile, MemberProfile
 
 
@@ -111,9 +113,16 @@ class GroupFitnessClassForm(forms.ModelForm):
         model = GroupFitnessClass
         fields = ['title', 'description', 'date',
                   'location', 'capacity', 'duration',
-                  'difficulty','equipment', 'trainer']
+                  'difficulty','equipment', 'trainer', 'status']
         widgets = {'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
                    'description':forms.Textarea(attrs={'rows': 3}),}
+
+    # Avoid choose date from the past
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if date and date < timezone.now():
+            raise forms.ValidationError('You cannot select a past date or time.')
+        return date
 
 # Trainer update availability form
 class AvailabilityForm(forms.ModelForm):

@@ -114,7 +114,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Pacific/Auckland'
 
 USE_I18N = True
 
