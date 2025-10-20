@@ -21,11 +21,11 @@ class CustomUserAdmin(UserAdmin):
 
     actions = ['approve', 'reject']
 
-    def approve(self, request, queryset):
+    def approve(self, queryset):
         queryset.update(is_approved=True)
     approve.short_description = 'Approve selected users'
 
-    def reject(self, request, queryset):
+    def reject(self, queryset):
         queryset.update(is_approved=False)
     reject.short_description = 'Reject selected users'
 

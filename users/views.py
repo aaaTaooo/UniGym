@@ -15,10 +15,6 @@ def gm_register(request):
         form = GymMemberRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            # user = form.save(commit=False)
-            # user.role = 'member'
-            # user.save()
-            # MemberProfile.objects.get_or_create(user=user)
 
             messages.success(request, 'Membership account created successfully! Please wait admin to approve.')
             return redirect('login')
@@ -30,10 +26,6 @@ def pt_register(request):
         form = PersonalTrainerRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            # user = form.save(commit=False)
-            # user.role = 'trainer'
-            # user.save()
-            # TrainerProfile.objects.get_or_create(user=user)
 
             messages.success(request, 'Trainer account created successfully! Please wait admin to approve.')
             return redirect('login')
@@ -43,8 +35,6 @@ def pt_register(request):
 
 # Users login page
 def custom_login(request):
-    # if request.user.is_authenticated:
-    #     logout(request)
     if request.user.is_authenticated:
         if request.user.role == 'admin':
             return redirect('admin_dashboard')
@@ -181,7 +171,7 @@ def update_member_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
-            return redirect('member_trainer_list')
+            return redirect('member_dashboard')
     else:
         form = MemberUpdateForm(instance=member_profile)
 
@@ -192,7 +182,8 @@ def update_member_profile(request):
 @user_passes_test(trainer_check)
 def trainer_dashboard(request):
     trainer_profile = TrainerProfile.objects.filter(user=request.user).first()
-    return render(request, 'users/Trainer/trainer_dashboard.html', {"trainer_profile": trainer_profile, })
+    return render(request, 'users/Trainer/trainer_dashboard.html',
+                  {"trainer_profile": trainer_profile, })
 
 @login_required
 @user_passes_test(trainer_check)
@@ -266,23 +257,6 @@ def update_trainer_profile(request):
     return render(request, 'users/Trainer/update_trainer_profile.html', {'form': form})
 
 # ===================================Admin related functions===================================
-def get_admin_stats():
-    total_users = CustomUser.objects.count()
-    total_trainers = TrainerProfile.objects.count()
-    total_members = CustomUser.objects.filter(role='member').count()
-
-    return {
-        "stats": {
-            "total_users": CustomUser.objects.count(),
-            "total_trainers": TrainerProfile.objects.count(),
-            "total_members": CustomUser.objects.filter(role='member').count(),
-            "total_admins": total_users - total_trainers - total_members,
-            "total_bookings": Booking.objects.count(),
-            "total_classes": GroupFitnessClass.objects.count(),
-        },
-        "pending_members": MemberProfile.objects.filter(user__is_approved=False),
-        "pending_trainers": TrainerProfile.objects.filter(user__is_approved=False),
-    }
 @login_required
 @user_passes_test(admin_check)
 def admin_dashboard(request):
@@ -399,3 +373,21 @@ def admin_cancel_booking(request, booking_id):
     booking.save()
     messages.success(request, 'Booking canceled by admin.')
     return redirect('view_bookings')
+
+def get_admin_stats():
+    total_users = CustomUser.objects.count()
+    total_trainers = TrainerProfile.objects.count()
+    total_members = CustomUser.objects.filter(role='member').count()
+
+    return {
+        "stats": {
+            "total_users": CustomUser.objects.count(),
+            "total_trainers": TrainerProfile.objects.count(),
+            "total_members": CustomUser.objects.filter(role='member').count(),
+            "total_admins": total_users - total_trainers - total_members,
+            "total_bookings": Booking.objects.count(),
+            "total_classes": GroupFitnessClass.objects.count(),
+        },
+        "pending_members": MemberProfile.objects.filter(user__is_approved=False),
+        "pending_trainers": TrainerProfile.objects.filter(user__is_approved=False),
+    }

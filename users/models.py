@@ -8,11 +8,7 @@ from django.utils import timezone
 # Create your models here.
 # User model
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = (
-    ('member', 'Member'),
-    ('trainer', 'Trainer'),
-    ('admin', 'Admin'),
-    )
+    ROLE_CHOICES = (('member', 'Member'),('trainer', 'Trainer'),('admin', 'Admin'))
     role = models.CharField(max_length=10, choices=ROLE_CHOICES,default='member')
     # for new user registration
     is_approved = models.BooleanField(default=False)
