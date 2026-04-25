@@ -2,10 +2,34 @@
 {% block title %}Services{% endblock %}
 
 {% block content %}
-    <h2>Our Services</h2>
-    <ul>
-        <li>Personal training - Find your favorite personal trainer here.</li>
-        <li>Group fitness classes - Endless group fitness classes will fit your demands.</li>
-        <li>Fitness consultation - Contact our personal trainer or staff for personalized fitness program.</li>
-    </ul>
+<div class="max-w-4xl mx-auto">
+  <div class="text-center mb-12">
+    <p class="text-amber-500 font-semibold uppercase tracking-widest text-sm">What We Offer</p>
+    <h1 class="text-4xl font-bold text-blue-900 mt-2">Our Services</h1>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+      <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-3xl mb-5">🏋️</div>
+      <h3 class="font-bold text-blue-900 text-xl mb-3">Personal Training</h3>
+      <p class="text-gray-500 text-sm leading-relaxed">Find your favorite personal trainer here. Get customized workout plans tailored to your goals and fitness level.</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+      <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center text-3xl mb-5">🤸</div>
+      <h3 class="font-bold text-blue-900 text-xl mb-3">Group Fitness Classes</h3>
+      <p class="text-gray-500 text-sm leading-relaxed">Endless group fitness classes to fit your demands — all included with basic membership. Free for all members!</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+      <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-3xl mb-5">💬</div>
+      <h3 class="font-bold text-blue-900 text-xl mb-3">Fitness Consultation</h3>
+      <p class="text-gray-500 text-sm leading-relaxed">Contact our personal trainers or staff for a personalized fitness program designed to help you reach your goals faster.</p>
+    </div>
+  </div>
+
+  <div class="mt-12 bg-gradient-to-r from-blue-900 to-blue-800 rounded-2xl p-10 text-center text-white">
+    <h2 class="text-2xl font-bold mb-3">Ready to get started?</h2>
+    <p class="text-blue-200 mb-6">Join UniGym and access all these services with a free basic membership.</p>
+    <a href="{% url 'gm_register' %}" class="inline-block bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold px-10 py-3 rounded-lg transition-colors">Sign Up Free</a>
+  </div>
+</div>
 {% endblock %}

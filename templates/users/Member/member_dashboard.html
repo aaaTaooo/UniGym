@@ -1,38 +1,67 @@
 {% extends "users/user_base_pattern.html" %}
 {% block title %}Gym Member{% endblock %}
 
+{% block sidebar %}
+<a href="{% url 'member_dashboard' %}" class="sidebar-link active">🏠 Dashboard</a>
+<a href="{% url 'member_class' %}" class="sidebar-link">📅 Fitness Classes</a>
+<a href="{% url 'member_booking' %}" class="sidebar-link">🎫 My Bookings</a>
+<a href="{% url 'member_trainer_list' %}" class="sidebar-link">👥 Trainers</a>
+<a href="{% url 'update_member_profile' %}" class="sidebar-link">✏️ Edit Profile</a>
+{% endblock %}
+
 {% block content %}
-        <p>Contact Email: {{ profile.email }}</p>
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-blue-900">Member Dashboard</h1>
+    <p class="text-gray-500 text-sm mt-1">Welcome back! Here's your profile overview.</p>
+  </div>
 
-    <hr>
-    <nav>
-        <ul>
-            <li><a href="{% url 'member_dashboard' %}">Member Dashboard</a></li>
-            <li><a href="{% url 'member_class' %}">Available Group Fitness Classes</a></li>
-            <li><a href="{% url 'member_booking' %}">My Bookings</a></li>
-            <li><a href="{% url 'member_trainer_list' %}">Personal Trainers</a></li>
-            <li><a href="{% url 'update_member_profile' %}">Update Profile</a></li>
-        </ul>
-    </nav>
+  {% if profile %}
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-blue-900 text-white rounded-xl p-5 sm:col-span-1">
+      <div class="text-5xl mb-3 text-center">👤</div>
+      <h2 class="font-bold text-center text-lg">{{ user.username }}</h2>
+      <p class="text-blue-300 text-xs text-center mt-1">Member since {{ profile.join_date|date:"M Y" }}</p>
+    </div>
+    <div class="sm:col-span-2 grid grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Height</p>
+        <p class="text-xl font-bold text-blue-900 mt-1">{{ profile.height|default:"—" }} <span class="text-sm font-normal text-gray-400">cm</span></p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Weight</p>
+        <p class="text-xl font-bold text-blue-900 mt-1">{{ profile.weight|default:"—" }} <span class="text-sm font-normal text-gray-400">kg</span></p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Gender</p>
+        <p class="font-semibold text-gray-800 mt-1">{{ profile.gender|default:"—"|capfirst }}</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Date of Birth</p>
+        <p class="font-semibold text-gray-800 mt-1">{{ profile.date_of_birth|date:"M d, Y"|default:"—" }}</p>
+      </div>
+    </div>
+  </div>
 
-    <hr>
-    {% block dashboard_content %}
-        <h2>Your member Profile</h2>
-        {% if profile %}
-            <p><strong>Join Date:</strong> {{ profile.join_date }}</p>
-            <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
-            <p><strong>Gender:</strong> {{ profile.gender }}</p>
-            <p><strong>Fitness Goal:</strong> {{ profile.fitness_goal }}</p>
-            <p><strong>Current Height:</strong> {{ profile.height }} cm</p>
-            <p><strong>Current Weight:</strong> {{ profile.weight }} kg</p>
-            <p><strong>Contact Email:</strong> {{ profile.email }}</p>
-            <p><strong>Contact Phone number:</strong> {{ profile.phone }}</p>
-            <p><strong>Emergency Contact:</strong> {{ profile.emergency_contact_name }}</p>
-            <p><strong>Emergency Contact Number:</strong> {{ profile.emergency_contact_phone }}</p>
-        {% else %}
-            <p>No member profile found.</p>
-        {% endif %}
-    {% endblock %}
+  <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-3">
+    <h2 class="font-bold text-blue-900 text-lg mb-4">Profile Details</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+      <div><span class="text-gray-400 font-semibold">Fitness Goal:</span> <span class="text-gray-800 ml-2">{{ profile.fitness_goal|default:"Not set" }}</span></div>
+      <div><span class="text-gray-400 font-semibold">Email:</span> <span class="text-gray-800 ml-2">{{ profile.email|default:"Not set" }}</span></div>
+      <div><span class="text-gray-400 font-semibold">Phone:</span> <span class="text-gray-800 ml-2">{{ profile.phone|default:"Not set" }}</span></div>
+      <div><span class="text-gray-400 font-semibold">Emergency Contact:</span> <span class="text-gray-800 ml-2">{{ profile.emergency_contact_name|default:"Not set" }}</span></div>
+      <div><span class="text-gray-400 font-semibold">Emergency Phone:</span> <span class="text-gray-800 ml-2">{{ profile.emergency_contact_phone|default:"Not set" }}</span></div>
+    </div>
+  </div>
 
-    <a href="{% url 'logout' %}">Logout</a>
+  <div class="flex gap-3">
+    <a href="{% url 'member_class' %}" class="btn btn-primary">Browse Classes →</a>
+    <a href="{% url 'update_member_profile' %}" class="btn btn-ghost">Edit Profile</a>
+  </div>
+  {% else %}
+  <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-6">
+    <p>No member profile found. Please contact an admin.</p>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}

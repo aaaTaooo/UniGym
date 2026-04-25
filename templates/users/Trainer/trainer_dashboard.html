@@ -1,44 +1,60 @@
 {% extends "users/user_base_pattern.html" %}
 {% block title %}Personal Trainer{% endblock %}
 
+{% block sidebar %}
+<a href="{% url 'trainer_dashboard' %}" class="sidebar-link active">🏠 Dashboard</a>
+<a href="{% url 'trainer_availability' %}" class="sidebar-link">🗓️ Availability</a>
+<a href="{% url 'trainer_class' %}" class="sidebar-link">📋 My Classes</a>
+<a href="{% url 'update_trainer_profile' %}" class="sidebar-link">✏️ Edit Profile</a>
+{% endblock %}
+
 {% block content %}
-    <p>Contact Email: {{ trainer_profile.email }}</p>
+<div class="space-y-6">
+  <div>
+    <h1 class="text-2xl font-bold text-blue-900">Trainer Dashboard</h1>
+    <p class="text-gray-500 text-sm mt-1">Manage your profile, availability, and classes.</p>
+  </div>
 
-    <hr>
-    <nav>
-        <ul>
-            <li><a href="{% url 'trainer_dashboard' %}">Trainer Dashboard</a></li>
-            <li><a href="{% url 'trainer_availability' %}">Manage Availability</a></li>
-            <li><a href="{% url 'trainer_class' %}">My Group Classes</a></li>
-            <li><a href="{% url 'update_trainer_profile' %}">Update Profile</a></li>
-        </ul>
-    </nav>
+  {% if trainer_profile %}
+  <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <div class="bg-gradient-to-r from-blue-900 to-blue-800 p-8 flex flex-col sm:flex-row items-center gap-6">
+      {% if trainer_profile.photo %}
+      <img src="{{ trainer_profile.photo.url }}" class="w-28 h-36 object-cover rounded-xl shadow-lg">
+      {% else %}
+      <div class="w-28 h-36 bg-blue-700 rounded-xl flex items-center justify-center text-5xl">👤</div>
+      {% endif %}
+      <div class="text-white text-center sm:text-left">
+        <h2 class="text-2xl font-bold">{{ user.username }}</h2>
+        <p class="text-blue-300 mt-1">{{ trainer_profile.specialization|default:"Personal Trainer" }}</p>
+        <div class="flex flex-wrap gap-3 mt-3 justify-center sm:justify-start">
+          <span class="bg-amber-400 text-gray-900 font-bold px-3 py-1 rounded-full text-sm">${{ trainer_profile.price_per_hour|default:"—" }}/hr</span>
+          <span class="bg-blue-700 text-blue-200 px-3 py-1 rounded-full text-sm">{{ trainer_profile.years_of_experience|default:"0" }} yrs exp</span>
+        </div>
+      </div>
+    </div>
 
-    <hr>
-    {% block dashboard_content %}
-        <h2>Your Profile Details</h2>
-        {% if trainer_profile %}
+    <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <h3 class="font-bold text-blue-900 mb-2">Bio</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">{{ trainer_profile.bio|default:"No bio yet." }}</p>
+      </div>
+      <div class="space-y-2 text-sm">
+        <div class="flex gap-2"><span class="text-gray-400 w-28">Certifications:</span> <span class="text-gray-700">{{ trainer_profile.certifications|default:"—" }}</span></div>
+        <div class="flex gap-2"><span class="text-gray-400 w-28">Languages:</span> <span class="text-gray-700">{{ trainer_profile.languages|default:"—" }}</span></div>
+        <div class="flex gap-2"><span class="text-gray-400 w-28">Email:</span> <span class="text-gray-700">{{ trainer_profile.email|default:"—" }}</span></div>
+        <div class="flex gap-2"><span class="text-gray-400 w-28">Phone:</span> <span class="text-gray-700">{{ trainer_profile.phone|default:"—" }}</span></div>
+      </div>
+    </div>
+  </div>
 
-            {% if trainer_profile.photo %}
-                <img src="{{ trainer_profile.photo.url }}" alt="Your photo" width ="300">
-            {% else %}
-                <p>No Photo uploaded yet.</p>
-            {% endif %}
-
-            <p><strong>Bio:</strong> {{ trainer_profile.bio }}</p>
-            <p><strong>Specialization:</strong> {{ trainer_profile.specialization }}</p>
-            <p><strong>Certifications:</strong> {{ trainer_profile.certifications }}</p>
-            <p><strong>Experience:</strong> {{ trainer_profile.years_of_experience }} years</p>
-            <p><strong>Languages:</strong> {{ trainer_profile.languages }}</p>
-            <p><strong>Price per hour:</strong> ${{ trainer_profile.price_per_hour }}/Hour</p>
-            <p><strong>Contact Email:</strong> {{ trainer_profile.email }}</p>
-            <p><strong>Contact Phone number:</strong> {{ trainer_profile.phone }}</p>
-
-        {% else %}
-            <p>No profile found. Please <a href="{% url 'update_trainer_profile' %}">create or update your profile</a>.</p>
-        {% endif %}
-    {% endblock %}
-
-    <hr>
-    <a href="{% url 'logout' %}">Logout</a>
+  <div class="flex gap-3">
+    <a href="{% url 'trainer_availability' %}" class="btn btn-primary">Manage Availability</a>
+    <a href="{% url 'update_trainer_profile' %}" class="btn btn-ghost">Edit Profile</a>
+  </div>
+  {% else %}
+  <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-6">
+    <p>No profile found. <a href="{% url 'update_trainer_profile' %}" class="font-semibold underline">Create your profile</a></p>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}

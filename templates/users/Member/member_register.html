@@ -2,33 +2,94 @@
 {% block title %}Register as Member{% endblock %}
 
 {% block content %}
-    <h2>Register as Gym Member</h2>
-    <form method="post">
-        {% csrf_token  %}
+<div class="max-w-2xl mx-auto">
+  <div class="text-center mb-8">
+    <div class="inline-block bg-blue-900 text-amber-400 rounded-2xl p-4 mb-4 text-3xl">🏃</div>
+    <h1 class="text-3xl font-bold text-blue-900">Join as Gym Member</h1>
+    <p class="text-gray-500 mt-1">Create your account and start your fitness journey</p>
+  </div>
 
-        <p>{{ form.username.label_tag }} {{ form.username }}</p>
-        <p>{{ form.password1.label_tag }} {{ form.password1 }}</p>
-        <p>{{ form.password2.label_tag }} {{ form.password2 }}</p>
-        <p>{{ form.email.label_tag }} {{ form.email }}</p>
-        <p>{{ form.phone.label_tag }} {{ form.phone }}</p>
-        <p>{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</p>
-        <p>{{ form.gender.label_tag }} {{ form.gender }}</p>
-        <p>{{ form.fitness_goal.label_tag }} {{ form.fitness_goal }}</p>
-        <p>{{ form.height.label_tag }} {{ form.height }}</p>
-        <p>{{ form.weight.label_tag }} {{ form.weight }}</p>
-        <p>{{ form.emergency_contact_name.label_tag }} {{ form.emergency_contact_name }}</p>
-        <p>{{ form.emergency_contact_phone.label_tag }} {{ form.emergency_contact_phone }}</p>
-        <button type="submit">Register</button>
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="sm:col-span-2">
+          <h2 class="text-sm font-bold text-blue-900 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4">Account Details</h2>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.username.label }}</label>
+          {{ form.username }}
+          {% if form.username.errors %}<p class="text-red-500 text-xs mt-1">{{ form.username.errors|join:", " }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.email.label }}</label>
+          {{ form.email }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}<p class="text-red-500 text-xs mt-1">{{ form.password1.errors|join:", " }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}<p class="text-red-500 text-xs mt-1">{{ form.password2.errors|join:", " }}</p>{% endif %}
+        </div>
+
+        <div class="sm:col-span-2">
+          <h2 class="text-sm font-bold text-blue-900 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4 mt-2">Personal Information</h2>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.phone.label }}</label>
+          {{ form.phone }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.date_of_birth.label }}</label>
+          {{ form.date_of_birth }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.gender.label }}</label>
+          {{ form.gender }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.fitness_goal.label }}</label>
+          {{ form.fitness_goal }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.height.label }}</label>
+          {{ form.height }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.weight.label }}</label>
+          {{ form.weight }}
+        </div>
+
+        <div class="sm:col-span-2">
+          <h2 class="text-sm font-bold text-blue-900 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4 mt-2">Emergency Contact</h2>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.emergency_contact_name.label }}</label>
+          {{ form.emergency_contact_name }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.emergency_contact_phone.label }}</label>
+          {{ form.emergency_contact_phone }}
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition-colors mt-4">
+        Create Account
+      </button>
     </form>
 
-    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <p class="text-center text-sm text-gray-500 mt-6">Already have an account? <a href="{% url 'login' %}" class="text-blue-700 font-semibold hover:underline">Login here</a></p>
+  </div>
+</div>
 
-    {#display message#}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+<style>
+  form input, form select, form textarea {
+    @apply w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition;
+  }
+</style>
 {% endblock %}

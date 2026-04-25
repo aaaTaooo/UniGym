@@ -1,39 +1,110 @@
-{% extends 'users/Admin/admin_dashboard.html' %}
-{% block dashboard_content %}
-    <h2>{{ action }} Group Fitness Class</h2>
+{% extends "users/user_base_pattern.html" %}
+{% block title %}Administrator{% endblock %}
 
-    <form method="post">
-        {% csrf_token %}
-        <p>{{ form.title.label_tag }} {{ form.title }}</p>
-        <p>{{ form.description.label_tag }} {{ form.description }}</p>
-        <p>
-            {{ form.date.label_tag }}
-            <input type="datetime-local"
-                   class="form-control"
-                   name="{{ form.date.name }}"
-                   id="{{ form.date.id_for_label }}"
-                   min="{{ now|date:'Y-m-d\\TH:i' }}"
-                   value="{{ form.date.value|default_if_none:'' }}">
-        </p>
-        <p>{{ form.location.label_tag }} {{ form.location }}</p>
-        <p>{{ form.capacity.label_tag }} {{ form.capacity }}</p>
-        <p>{{ form.duration.label_tag }} {{ form.duration }}</p>
-        <p>{{ form.difficulty.label_tag }} {{ form.difficulty }}</p>
-        <p>{{ form.equipment.label_tag }} {{ form.equipment }}</p>
-        <p>{{ form.status.label_tag }} {{ form.status }}</p>
-        <p>{{ form.trainer.label_tag }} {{ form.trainer }}</p>
+{% block sidebar %}
+<a href="{% url 'admin_dashboard' %}" class="sidebar-link">🏠 Dashboard</a>
+<a href="{% url 'manage_pending_user' %}" class="sidebar-link">📝 Pending Users</a>
+<a href="{% url 'manage_group_fitness_class' %}" class="sidebar-link active">🏋️ Manage Classes</a>
+<a href="{% url 'view_bookings' %}" class="sidebar-link">🎫 All Bookings</a>
+{% endblock %}
 
-    <button type="submit">{{ action }}</button>
-    {% if form.errors %}
-        <ul style="color:red;">
-            {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <li><strong>{{ field|capfirst }}</strong>: {{ error }}</li>
-                {% endfor %}
+{% block content %}
+<div class="space-y-6 max-w-xl">
+  <div class="flex items-center gap-3">
+    <a href="{% url 'manage_group_fitness_class' %}" class="text-sm text-blue-700 hover:text-blue-900 font-medium">← Back to Classes</a>
+  </div>
+  <div>
+    <h1 class="text-2xl font-bold text-blue-900">{{ action }} Group Fitness Class</h1>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.title.label }}</label>
+        {{ form.title }}
+        {% if form.title.errors %}<p class="text-red-500 text-xs mt-1">{{ form.title.errors|join:", " }}</p>{% endif %}
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.description.label }}</label>
+        {{ form.description }}
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.date.label }}</label>
+        <input type="datetime-local"
+               name="{{ form.date.name }}"
+               id="{{ form.date.id_for_label }}"
+               {% if now %}min="{{ now|date:'Y-m-d\\TH:i' }}"{% endif %}
+               value="{{ form.date.value|default_if_none:'' }}"
+               class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+        {% if form.date.errors %}<p class="text-red-500 text-xs mt-1">{{ form.date.errors|join:", " }}</p>{% endif %}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.location.label }}</label>
+          {{ form.location }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.capacity.label }}</label>
+          {{ form.capacity }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.duration.label }}</label>
+          {{ form.duration }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.difficulty.label }}</label>
+          {{ form.difficulty }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.equipment.label }}</label>
+        {{ form.equipment }}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.status.label }}</label>
+          {{ form.status }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">{{ form.trainer.label }}</label>
+          {{ form.trainer }}
+        </div>
+      </div>
+
+      {% if form.errors %}
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+        <ul class="text-red-600 text-sm space-y-1">
+          {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+              <li>{{ field|capfirst }}: {{ error }}</li>
             {% endfor %}
+          {% endfor %}
         </ul>
-    {% endif %}
-    </form>
+      </div>
+      {% endif %}
 
-    <a href="{% url 'manage_group_fitness_class' %}"> Back to classes |</a>
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="btn btn-primary">{{ action }} Class</button>
+        <a href="{% url 'manage_group_fitness_class' %}" class="btn btn-ghost">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .bg-white form input, .bg-white form select, .bg-white form textarea {
+    width: 100%; padding: 0.625rem 0.75rem; border: 1px solid #d1d5db;
+    border-radius: 0.5rem; font-size: 0.875rem;
+  }
+  .bg-white form input:focus, .bg-white form select:focus, .bg-white form textarea:focus {
+    outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); border-color: #3b82f6;
+  }
+</style>
 {% endblock %}
